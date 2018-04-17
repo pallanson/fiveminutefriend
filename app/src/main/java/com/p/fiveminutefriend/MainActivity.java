@@ -11,7 +11,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String text = "Hello Worldfds!";
+        String text = "Hello World fjfwe!";
         Log.d(text, text);
     }
 }
