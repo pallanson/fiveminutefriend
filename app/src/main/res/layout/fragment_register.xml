@@ -1,0 +1,206 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.p.fiveminutefriend.RegisterFragment">
+
+    <TextView
+        android:id="@+id/text_title_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="36dp"
+        android:text="Create Account"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/text_first_name_register"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="First Name"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_title_register" />
+
+    <EditText
+        android:id="@+id/edit_initial_register"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_first_name_register" />
+
+    <EditText
+        android:id="@+id/edit_username_register"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Username"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/edit_initial_register"
+        app:layout_constraintStart_toEndOf="@+id/imageview_username_register"
+        app:layout_constraintTop_toBottomOf="@+id/edit_initial_register" />
+
+    <EditText
+        android:id="@+id/edit_email_register"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="@+id/edit_username_register"
+        app:layout_constraintStart_toEndOf="@+id/imageView_email_register"
+        app:layout_constraintTop_toBottomOf="@+id/edit_username_register" />
+
+    <ImageView
+        android:id="@+id/imageview_username_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_person_outline_black_24px"
+        android:tint="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_username_register"
+        app:layout_constraintStart_toStartOf="@+id/edit_initial_register"
+        app:layout_constraintTop_toTopOf="@+id/edit_username_register"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/imageView_email_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_email_black_24px"
+        android:tint="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_email_register"
+        app:layout_constraintStart_toStartOf="@+id/imageview_username_register"
+        app:layout_constraintTop_toTopOf="@+id/edit_email_register"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/imageview_password_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_lock_black_24px"
+        android:tint="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
+        app:layout_constraintStart_toStartOf="@+id/imageView_email_register"
+        app:layout_constraintTop_toTopOf="@+id/textInputLayout"
+        tools:ignore="ContentDescription" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/edit_email_register"
+        app:layout_constraintStart_toStartOf="@id/edit_email_register"
+        app:layout_constraintTop_toBottomOf="@+id/edit_email_register"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@android:color/darker_gray">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/edit_password_register"
+            style="@android:style/TextAppearance.Holo.Widget.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:singleLine="false"
+            android:textColorHint="@android:color/darker_gray" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Create Account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/text_age_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Age"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/imageview_password_register"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+
+    <TextView
+        android:id="@+id/text_select_age_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+        app:layout_constraintTop_toTopOf="@+id/text_age_register" />
+
+    <TextView
+        android:id="@+id/text_select_gender_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/text_select_age_register"
+        app:layout_constraintTop_toTopOf="@+id/text_gender_register" />
+
+    <TextView
+        android:id="@+id/text_select_language_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/text_select_gender_register"
+        app:layout_constraintTop_toTopOf="@+id/text_language_register" />
+
+    <TextView
+        android:id="@+id/text_gender_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Gender"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/text_age_register"
+        app:layout_constraintTop_toBottomOf="@+id/text_age_register" />
+
+    <TextView
+        android:id="@+id/text_language_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Language"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/text_gender_register"
+        app:layout_constraintTop_toBottomOf="@+id/text_gender_register" />
+
+</android.support.constraint.ConstraintLayout>
