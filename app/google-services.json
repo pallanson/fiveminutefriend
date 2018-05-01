@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "454623789994",
+    "firebase_url": "https://five-minute-friend.firebaseio.com",
+    "project_id": "five-minute-friend",
+    "storage_bucket": "five-minute-friend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:454623789994:android:35807460bf463657",
+        "android_client_info": {
+          "package_name": "com.p.fiveminutefriend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "454623789994-9rm9dfev75c89gq1m7k29sijb33eq730.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.p.fiveminutefriend",
+            "certificate_hash": "09a31ab71b6f861a4bb982bdaa8cf714ecf52762"
+          }
+        },
+        {
+          "client_id": "454623789994-j5lau9flimcru7j3fb88h4i7oo8ugnai.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDsaKKEw9G2lnSu9vhxGMm3-El0A9VGzs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "454623789994-j5lau9flimcru7j3fb88h4i7oo8ugnai.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
