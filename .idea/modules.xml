@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/fiveminutefriend.iml" filepath="$PROJECT_DIR$/fiveminutefriend.iml" />
       <module fileurl="file://C:\Users\Phil\Documents\GitHub\fiveminutefriend\FiveMinuteFriend2.iml" filepath="C:\Users\Phil\Documents\GitHub\fiveminutefriend\FiveMinuteFriend2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fiveminutefriend.iml" filepath="$PROJECT_DIR$/fiveminutefriend.iml" />
     </modules>
   </component>
 </project>
