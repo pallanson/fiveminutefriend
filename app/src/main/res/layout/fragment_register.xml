@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/text_first_name_register"
+        android:id="@+id/edit_first_name_register"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -33,7 +33,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_title_register" />
 
     <EditText
-        android:id="@+id/edit_initial_register"
+        android:id="@+id/edit_last_name_register"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -44,7 +44,7 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_first_name_register" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_first_name_register" />
 
     <EditText
         android:id="@+id/edit_username_register"
@@ -55,9 +55,9 @@
         android:ems="10"
         android:hint="Username"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/edit_initial_register"
+        app:layout_constraintEnd_toEndOf="@+id/edit_last_name_register"
         app:layout_constraintStart_toEndOf="@+id/imageview_username_register"
-        app:layout_constraintTop_toBottomOf="@+id/edit_initial_register" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_last_name_register" />
 
     <EditText
         android:id="@+id/edit_email_register"
@@ -81,7 +81,7 @@
         android:src="@drawable/ic_person_outline_black_24px"
         android:tint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="@+id/edit_username_register"
-        app:layout_constraintStart_toStartOf="@+id/edit_initial_register"
+        app:layout_constraintStart_toStartOf="@+id/edit_last_name_register"
         app:layout_constraintTop_toTopOf="@+id/edit_username_register"
         tools:ignore="ContentDescription" />
 
@@ -132,7 +132,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_create_account_register"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Create Account"
@@ -154,34 +154,38 @@
         android:id="@+id/text_select_age_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
         android:text="Select"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
-        app:layout_constraintTop_toTopOf="@+id/text_age_register" />
+        app:layout_constraintTop_toTopOf="@+id/text_age_register"
+        tools:layout_editor_absoluteX="305dp" />
 
     <TextView
         android:id="@+id/text_select_gender_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:text="Select"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/text_select_age_register"
-        app:layout_constraintTop_toTopOf="@+id/text_gender_register" />
+        app:layout_constraintTop_toTopOf="@+id/text_gender_register" android:focusable="true" />
 
     <TextView
         android:id="@+id/text_select_language_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:text="Select"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/text_select_gender_register"
-        app:layout_constraintTop_toTopOf="@+id/text_language_register" />
+        app:layout_constraintTop_toTopOf="@+id/text_language_register" android:focusable="true" />
 
     <TextView
         android:id="@+id/text_gender_register"
