@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -22,9 +23,18 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        ///HERROOO
+        val database = FirebaseDatabase.getInstance()
+        val ref = FirebaseDatabase.getInstance()
+                .getReferenceFromUrl(Constants.FIREBASE_USERS)
+        ref.child("I am Martin").setValue("HERROO")
+        ///IMM HERE
+
+
         loginButton = findViewById(R.id.button_sign_in_login)
         emailOrUsername = findViewById(R.id.edit_email_login)
         password = findViewById(R.id.edit_password_login)
+
 
         loginButton.setOnClickListener({
             performLogin(emailOrUsername.text.toString().trim(),
