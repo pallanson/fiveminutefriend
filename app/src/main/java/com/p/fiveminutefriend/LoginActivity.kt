@@ -1,6 +1,7 @@
 package com.p.fiveminutefriend
 
 import android.app.Dialog
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
@@ -32,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
      fun performLogin(emailOrUsername: String?, password: String?) {
+            startActivity(Intent(this, ChatActivity::class.java))
             if (emailOrUsername !is String || emailOrUsername!!.isEmpty()) {
                 Toast.makeText(this,
                         "Invalid Username or Email",
@@ -46,13 +48,12 @@ class LoginActivity : AppCompatActivity() {
                 return
             }
             FirebaseAuth.getInstance()
-                    .signInWithEmailAndPassword(emailOrUsername, password)
-                    .addOnCompleteListener({
-
-                        Toast.makeText(this,
-                                FirebaseAuth.getInstance().currentUser!!.email.toString(),
-                                Toast.LENGTH_SHORT).show()
-                    })
+                .signInWithEmailAndPassword(emailOrUsername, password)
+                .addOnCompleteListener({
+                    Toast.makeText(this,
+                            FirebaseAuth.getInstance().currentUser!!.email.toString(),
+                            Toast.LENGTH_SHORT).show()
+                })
         }
 }
 
