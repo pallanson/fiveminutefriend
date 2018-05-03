@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_login_content_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.p.fiveminutefriend.LoginActivity">
@@ -22,8 +22,8 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:drawableStart="@drawable/ic_person_outline_black_24px"
         android:drawablePadding="8dp"
+        android:drawableStart="@drawable/ic_person_outline_black_24px"
         android:drawableTint="@android:color/darker_gray"
         android:ems="10"
         android:fontFamily="sans-serif"
@@ -48,8 +48,8 @@
             android:id="@+id/edit_password_login"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:drawableStart="@drawable/ic_lock_black_24px"
             android:drawablePadding="8dp"
+            android:drawableStart="@drawable/ic_lock_black_24px"
             android:drawableTint="@android:color/darker_gray"
             android:hint="Password"
             android:inputType="textPassword" />
@@ -90,12 +90,12 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:clickable="true"
+        android:focusable="true"
         android:text="Click here to register"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:focusable="true" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
