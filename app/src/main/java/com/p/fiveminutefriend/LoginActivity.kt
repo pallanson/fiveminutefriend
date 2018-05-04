@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
      fun performLogin(emailOrUsername: String?, password: String?) {
-            startActivity(Intent(this, ChatActivity::class.java))
+
             if (emailOrUsername !is String || emailOrUsername!!.isEmpty()) {
                 Toast.makeText(this,
                         "Invalid Username or Email",
@@ -50,9 +50,15 @@ class LoginActivity : AppCompatActivity() {
             FirebaseAuth.getInstance()
                 .signInWithEmailAndPassword(emailOrUsername, password)
                 .addOnCompleteListener({
-                    Toast.makeText(this,
-                            FirebaseAuth.getInstance().currentUser!!.email.toString(),
-                            Toast.LENGTH_SHORT).show()
+                    if (it.isSuccessful) {
+                        Toast.makeText(this,
+                                FirebaseAuth.getInstance().currentUser!!.email.toString(),
+                                Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this, MainActivity::class.java))
+                    } else {
+                        Toast.makeText(this, "Invalid Email or Password",
+                                Toast.LENGTH_SHORT).show()
+                    }
                 })
         }
 }

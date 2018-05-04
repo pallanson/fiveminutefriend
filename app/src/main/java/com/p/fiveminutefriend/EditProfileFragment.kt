@@ -31,9 +31,7 @@ class EditProfileFragment : Fragment() {
         val firebaseAuth = FirebaseAuth.getInstance()
         val uid = firebaseAuth.uid
 
-        //TODO: Set child to UID once login is connected.
-        //val userReference = dbReference.child("owcn9gCAoyR279y4UEO756qey5B2")
-        val userReference = FirebaseDatabase.getInstance().reference.child("Users").child("owcn9gCAoyR279y4UEO756qey5B2")
+        val userReference = FirebaseDatabase.getInstance().reference.child("Users").child(uid)
 
         userReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -62,15 +60,15 @@ class EditProfileFragment : Fragment() {
         })*/
 
         button_save_changes.setOnClickListener({
-            dbReference.child(/*uid*/"QdJjQe9ZIEOd9xZUbkV5ZIJTesN2").setValue(
+            dbReference.child(uid).setValue(
                     User(
                             uid.toString(),
-                            edit_first_name.toString(),
-                            edit_last_name.toString(),
+                            edit_first_name.text.toString().trim(),
+                            edit_last_name.text.toString().trim(),
                             null,
-                            edit_email.toString(),
-                            spinner_language.toString(),
-                            26,//edit_age.toString().toInt(),
+                            edit_email.text.toString().trim(),
+                            null,//spinner_language.toString().trim(),
+                            edit_age.text.toString().toInt(),
                             1//spinner_gender.toString().toInt()
                     )
             )

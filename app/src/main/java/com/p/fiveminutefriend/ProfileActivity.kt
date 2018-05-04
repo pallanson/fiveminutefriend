@@ -2,7 +2,11 @@ package com.p.fiveminutefriend
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_profile.*
 
 class ProfileActivity : AppCompatActivity() {
@@ -11,28 +15,33 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        val database = FirebaseDatabase.getInstance()
-        val ref = FirebaseDatabase.getInstance()
-                .getReferenceFromUrl(Constants.FIREBASE_USERS)
+        val uid = FirebaseAuth.getInstance().uid
+        val userReference = FirebaseDatabase.getInstance().reference.child("Users").child(uid)
 
-        val tempUser = User(
-                "123456",
-                "Carl",
-                "Allanson",
-                "pallanson",
-                "philip.allanson@gmail.com",
-                "Swedish",
-                26,
-                2
-        )
+        userReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                var firstName = dataSnapshot.child("firstName").value.toString()
+                var lastName = dataSnapshot.child("lastName").value.toString()
+                var username = dataSnapshot.child("username").value.toString()
+                var email = dataSnapshot.child("email").value.toString()
+                var age = dataSnapshot.child("age").value.toString()
 
-        edit_first_name.setText(tempUser.firstName)
-        edit_last_name.setText(tempUser.lastName)
-        usernameText.setText(tempUser.username)
-        edit_email.setText(tempUser.email)
-        //languageText.setText(tempUser.language)
-        //edit_age.setText(tempUser.age)
-        //text_gender.setText(tempUser.gender)
+
+                text_name_profile.setText(firstName + " " + lastName)
+                text_username_profile.setText(username)
+                text_email_profile.setText(email)
+                //TODO: Replace hardcoded string with date when implemented
+                text_birthday_profile.setText("February 3, 1992 (" + age + " years old)")
+                //languageText.setText(tempUser.language)
+                //text_gender.setText(tempUser.gender)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+
+            }
+        })
+
+
 
         button_edit_profile.setOnClickListener({
             val EditProfileFragment = EditProfileFragment()
