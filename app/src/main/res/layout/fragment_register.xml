@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.p.fiveminutefriend.RegisterFragment">
+    android:background="@android:color/background_light"
+    tools:context="com.p.fiveminutefriend.RegisterFragment"
+    android:elevation="20dp">
 
     <TextView
         android:id="@+id/text_title_register"
@@ -160,32 +162,34 @@
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="@+id/text_age_register"
-        tools:layout_editor_absoluteX="305dp" />
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+        app:layout_constraintTop_toTopOf="@+id/text_age_register" />
 
     <TextView
         android:id="@+id/text_select_gender_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:focusable="true"
         android:text="Select"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/text_select_age_register"
-        app:layout_constraintTop_toTopOf="@+id/text_gender_register" android:focusable="true" />
+        app:layout_constraintTop_toTopOf="@+id/text_gender_register" />
 
     <TextView
         android:id="@+id/text_select_language_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:focusable="true"
         android:text="Select"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/text_select_gender_register"
-        app:layout_constraintTop_toTopOf="@+id/text_language_register" android:focusable="true" />
+        app:layout_constraintTop_toTopOf="@+id/text_language_register" />
 
     <TextView
         android:id="@+id/text_gender_register"

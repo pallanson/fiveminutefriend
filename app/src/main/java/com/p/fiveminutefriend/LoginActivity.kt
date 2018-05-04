@@ -1,16 +1,11 @@
 package com.p.fiveminutefriend
 
-import android.app.Dialog
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
+import android.content.Intent
+import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -19,11 +14,17 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val database = FirebaseDatabase.getInstance()
-        val ref = FirebaseDatabase.getInstance()
-                .getReferenceFromUrl(Constants.FIREBASE_USERS)
+        text_register_login.setOnClickListener({
+            val registerFragment = RegisterFragment()
+            val manager = supportFragmentManager
 
-        ref.child("I am Martin").setValue("HERROO")
+            val transaction = manager.beginTransaction()
+            transaction
+                    .replace(R.id.layout_login_content_login,
+                            registerFragment)
+                    .addToBackStack("Register")
+                    .commit()
+        })
 
         button_sign_in_login.setOnClickListener({
             performLogin(edit_email_login.text.toString().trim(),
@@ -32,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
      fun performLogin(emailOrUsername: String?, password: String?) {
+            startActivity(Intent(this, ChatActivity::class.java))
             if (emailOrUsername !is String || emailOrUsername!!.isEmpty()) {
                 Toast.makeText(this,
                         "Invalid Username or Email",
@@ -46,13 +48,12 @@ class LoginActivity : AppCompatActivity() {
                 return
             }
             FirebaseAuth.getInstance()
-                    .signInWithEmailAndPassword(emailOrUsername, password)
-                    .addOnCompleteListener({
-
-                        Toast.makeText(this,
-                                FirebaseAuth.getInstance().currentUser!!.email.toString(),
-                                Toast.LENGTH_SHORT).show()
-                    })
+                .signInWithEmailAndPassword(emailOrUsername, password)
+                .addOnCompleteListener({
+                    Toast.makeText(this,
+                            FirebaseAuth.getInstance().currentUser!!.email.toString(),
+                            Toast.LENGTH_SHORT).show()
+                })
         }
 }
 
