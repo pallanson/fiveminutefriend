@@ -1,17 +1,14 @@
 package com.p.fiveminutefriend
 
-import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+
 import com.github.bassaer.chatmessageview.model.Message
 import com.github.bassaer.chatmessageview.model.ChatUser
-import com.p.fiveminutefriend.R.id.chatView
-import com.p.fiveminutefriend.R.id.toolbar
 
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.content_chat.*
@@ -23,7 +20,7 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
         setSupportActionBar(toolbar)
-        val userIcon = BitmapFactory.decodeResource(this.resources, R.mipmap.placeholder_1)
+        val userIcon = BitmapFactory.decodeResource(this.resources, R.drawable.ic_action_add)
         val user = ChatUser(1, "Friend", userIcon)
         val me = ChatUser(2, "You", userIcon)
         chatView.setRightBubbleColor(ContextCompat.getColor(this, R.color.green500))
@@ -54,5 +51,4 @@ class ChatActivity : AppCompatActivity() {
             })
         }
     }
-
 }
