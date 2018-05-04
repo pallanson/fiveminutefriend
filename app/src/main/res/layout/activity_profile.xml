@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_profile_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -32,14 +33,15 @@
         app:layout_constraintTop_toBottomOf="@+id/title_profile" />
 
     <EditText
-        android:id="@+id/firstNameText"
+        android:id="@+id/edit_first_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:editable="false"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_first_name" />
@@ -53,17 +55,18 @@
         android:text="Last Name"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstNameText" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_first_name" />
 
     <EditText
-        android:id="@+id/lastNameText"
+        android:id="@+id/edit_last_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:editable="false"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_last_name" />
@@ -77,7 +80,7 @@
         android:text="Username"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lastNameText" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_last_name" />
 
     <EditText
         android:id="@+id/usernameText"
@@ -86,8 +89,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:editable="false"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_username" />
@@ -104,14 +108,15 @@
         app:layout_constraintTop_toBottomOf="@+id/usernameText" />
 
     <EditText
-        android:id="@+id/emailText"
+        android:id="@+id/edit_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:editable="false"
         android:ems="10"
-        android:inputType="textEmailAddress"
+        android:inputType="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_email" />
@@ -125,7 +130,7 @@
         android:text="Language"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailText" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_email" />
 
     <EditText
         android:id="@+id/languageText"
@@ -136,6 +141,7 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="none"
+        android:editable="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_language" />
@@ -152,14 +158,15 @@
         app:layout_constraintTop_toBottomOf="@+id/languageText" />
 
     <EditText
-        android:id="@+id/ageText"
+        android:id="@+id/edit_age"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:editable="false"
         android:ems="10"
-        android:inputType="number"
+        android:inputType="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_age" />
@@ -173,10 +180,10 @@
         android:text="Gender"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ageText" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_age" />
 
     <EditText
-        android:id="@+id/genderText"
+        android:id="@+id/edit_gender"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -184,6 +191,7 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="none"
+        android:editable="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -193,15 +201,13 @@
         android:id="@+id/button_edit_profile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="18dp"
         android:text="Edit Profile"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/genderText" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
