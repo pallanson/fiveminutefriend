@@ -1,6 +1,7 @@
 package com.p.fiveminutefriend
 
 import android.os.Bundle
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
@@ -31,29 +32,28 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-    fun performLogin(emailOrUsername: String?, password: String?) {
-        if (emailOrUsername !is String || emailOrUsername!!.isEmpty()) {
-            Toast.makeText(this,
-                    "Invalid Username or Email",
-                    Toast.LENGTH_SHORT).show()
-            return
-        }
+     fun performLogin(emailOrUsername: String?, password: String?) {
+            startActivity(Intent(this, ChatActivity::class.java))
+            if (emailOrUsername !is String || emailOrUsername!!.isEmpty()) {
+                Toast.makeText(this,
+                        "Invalid Username or Email",
+                        Toast.LENGTH_SHORT).show()
+                return
+            }
 
-        if (password !is String || password!!.isEmpty()) {
-            Toast.makeText(this,
-                    "Invalid Password",
-                    Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        FirebaseAuth.getInstance()
+            if (password !is String || password!!.isEmpty()) {
+                Toast.makeText(this,
+                        "Invalid Password",
+                        Toast.LENGTH_SHORT).show()
+                return
+            }
+            FirebaseAuth.getInstance()
                 .signInWithEmailAndPassword(emailOrUsername, password)
                 .addOnCompleteListener({
-
                     Toast.makeText(this,
                             FirebaseAuth.getInstance().currentUser!!.email.toString(),
                             Toast.LENGTH_SHORT).show()
                 })
-    }
+        }
 }
 
