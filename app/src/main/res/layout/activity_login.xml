@@ -5,7 +5,7 @@
     android:id="@+id/layout_login_content_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.p.fiveminutefriend.LoginActivity">
+    tools:context="com.p.fiveminutefriend.SignIn.LoginActivity">
 
     <Button
         android:id="@+id/button_sign_in_login"
