@@ -1,11 +1,12 @@
-package com.p.fiveminutefriend
+package com.p.fiveminutefriend.SignIn
 
 import android.os.Bundle
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.p.fiveminutefriend.MainActivity
+import com.p.fiveminutefriend.R
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -33,7 +34,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
      fun performLogin(emailOrUsername: String?, password: String?) {
-            startActivity(Intent(this, ChatActivity::class.java))
             if (emailOrUsername !is String || emailOrUsername!!.isEmpty()) {
                 Toast.makeText(this,
                         "Invalid Username or Email",
@@ -50,9 +50,18 @@ class LoginActivity : AppCompatActivity() {
             FirebaseAuth.getInstance()
                 .signInWithEmailAndPassword(emailOrUsername, password)
                 .addOnCompleteListener({
-                    Toast.makeText(this,
-                            FirebaseAuth.getInstance().currentUser!!.email.toString(),
-                            Toast.LENGTH_SHORT).show()
+                    if (it.isSuccessful) {
+                        Toast.makeText(this,
+                                FirebaseAuth.getInstance().currentUser!!.email.toString(),
+                                Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.putExtra("uid", FirebaseAuth.getInstance().currentUser!!.uid)
+                        startActivity(intent)
+                    }
+                    else {
+                        Toast.makeText(this, "Incorrect Username or Password",
+                                Toast.LENGTH_SHORT).show()
+                    }
                 })
         }
 }
