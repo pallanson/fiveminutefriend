@@ -105,7 +105,7 @@ class EditProfileFragment : Fragment() {
                             genderInt
                     )
             )
-            Toast.makeText(activity, "Changes Saved", Toast.LENGTH_SHORT)
+            Toast.makeText(activity, "Changes Saved", Toast.LENGTH_SHORT).show()
         })
     }
 

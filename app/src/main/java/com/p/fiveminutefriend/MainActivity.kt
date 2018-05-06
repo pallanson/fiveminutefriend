@@ -33,6 +33,9 @@ class MainActivity: AppCompatActivity() {
 
         settings.setOnMenuItemClickListener { menuItem ->
             Toast.makeText(this, "Go to settings", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, ProfileActivity::class.java)
+            intent.putExtra("uid", FirebaseAuth.getInstance().currentUser!!.uid)
+            startActivity(intent)
             true
         }
 
