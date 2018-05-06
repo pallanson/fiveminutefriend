@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.fragment_password_change.*
 class PasswordChangeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                           savedInstanceState: Bundle?): View? {
-        //TODO: Fix the activity (edit profile fragment) not returning after hitting back button
         if (container != null) {
             container.removeAllViews()
         }

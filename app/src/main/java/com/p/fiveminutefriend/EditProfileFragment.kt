@@ -73,17 +73,16 @@ class EditProfileFragment : Fragment() {
             createNumberPicker(2)
         })
 
-        //TODO: Fix SupportFragmentManager in order to go to another fragment
-        /*text_change_password.setOnClickListener({
+        text_change_password.setOnClickListener({
             val PasswordChangeFragment = PasswordChangeFragment()
-            val manager = getSupportFragmentManager()
+            val manager = fragmentManager
 
             val transaction = manager.beginTransaction()
             transaction
                     .replace(R.id.layout_profile_view, PasswordChangeFragment)
                     .addToBackStack("Change Password")
                     .commit()
-        })*/
+        })
 
         button_save_changes.setOnClickListener({
             var genderInt = 0
