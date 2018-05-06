@@ -21,8 +21,9 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.*
 class EditProfileFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        //TODO: Fix the activity not returning after hitting back button
         if (container != null) {
-            container.removeAllViews();
+            container.removeAllViews()
         }
         return inflater!!.inflate(R.layout.fragment_edit_profile, container, false)
     }
@@ -35,8 +36,9 @@ class EditProfileFragment : Fragment() {
         val firebaseAuth = FirebaseAuth.getInstance()
         val uid = firebaseAuth.uid
 
-        val userReference = FirebaseDatabase.getInstance().reference.child("Users").child(uid)
+        var username: String? = ""
 
+        val userReference = FirebaseDatabase.getInstance().reference.child("Users").child(uid)
         userReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 //Convert Gender int to String
@@ -49,6 +51,7 @@ class EditProfileFragment : Fragment() {
                 }
                 edit_first_name.setText(dataSnapshot.child("firstName").value.toString())
                 edit_last_name.setText(dataSnapshot.child("lastName").value.toString())
+                username = dataSnapshot.child("username").value.toString()
                 edit_email.setText(dataSnapshot.child("email").value.toString())
                 text_select_age_profile.text = dataSnapshot.child("age").value.toString()
                 text_select_gender_profile.text = genderString
@@ -70,6 +73,7 @@ class EditProfileFragment : Fragment() {
             createNumberPicker(2)
         })
 
+        //TODO: Fix SupportFragmentManager in order to go to another fragment
         /*text_change_password.setOnClickListener({
             val PasswordChangeFragment = PasswordChangeFragment()
             val manager = getSupportFragmentManager()
@@ -94,7 +98,7 @@ class EditProfileFragment : Fragment() {
                             uid.toString(),
                             edit_first_name.text.toString().trim(),
                             edit_last_name.text.toString().trim(),
-                            null,
+                            username,
                             edit_email.text.toString().trim(),
                             text_select_language_profile.text.toString().trim(),
                             text_select_age_profile.text.toString().toInt(),

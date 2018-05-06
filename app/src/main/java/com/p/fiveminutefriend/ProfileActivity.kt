@@ -65,8 +65,4 @@ class ProfileActivity : AppCompatActivity() {
                     .commit()
         })
     }
-
-    fun getGender(genderInt : Int) {
-        //TODO: Implement getGender here or fix function in User class.
-    }
 }

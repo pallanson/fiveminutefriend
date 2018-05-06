@@ -37,12 +37,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:drawablePadding="8dp"
+        android:drawableStart="@drawable/ic_email_black_24px"
+        android:drawableTint="@android:color/darker_gray"
         android:ems="10"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView_email_edit_profile"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_last_name" />
 
     <TextView
@@ -115,18 +118,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView_email_edit_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/edit_email"
-        app:layout_constraintStart_toStartOf="@+id/edit_last_name"
-        app:layout_constraintTop_toTopOf="@+id/edit_email"
-        app:srcCompat="@drawable/ic_email_black_24px" />
 
     <TextView
         android:id="@+id/text_select_age_profile"
