@@ -1,11 +1,15 @@
 package com.p.fiveminutefriend
 
+import android.app.AlertDialog
 import android.support.v4.app.Fragment
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.support.v4.view.ViewGroupCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.NumberPicker
+import android.widget.Toast
 import com.google.firebase.FirebaseError
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -35,17 +39,35 @@ class EditProfileFragment : Fragment() {
 
         userReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                //Convert Gender int to String
+                var genderString = ""
+
+                when (dataSnapshot.child("gender").value.toString().toInt()) {
+                    0 -> genderString = "Male"
+                    1 -> genderString = "Female"
+                    2 -> genderString = "Other"
+                }
                 edit_first_name.setText(dataSnapshot.child("firstName").value.toString())
                 edit_last_name.setText(dataSnapshot.child("lastName").value.toString())
                 edit_email.setText(dataSnapshot.child("email").value.toString())
-                edit_age.setText(dataSnapshot.child("age").value.toString())
-                setLanguage()
-                setGender()
+                text_select_age_profile.text = dataSnapshot.child("age").value.toString()
+                text_select_gender_profile.text = genderString
+                text_select_language_profile.text = dataSnapshot.child("language").value.toString()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
 
             }
+        })
+
+        text_select_gender_profile.setOnClickListener({
+            createNumberPicker(0)
+        })
+        text_select_age_profile.setOnClickListener({
+            createNumberPicker(1)
+        })
+        text_select_language_profile.setOnClickListener({
+            createNumberPicker(2)
         })
 
         /*text_change_password.setOnClickListener({
@@ -60,6 +82,13 @@ class EditProfileFragment : Fragment() {
         })*/
 
         button_save_changes.setOnClickListener({
+            var genderInt = 0
+
+            when (text_select_gender_profile.text.toString()) {
+                "Male" -> genderInt = 0
+                "Female" -> genderInt = 1
+                "Other" -> genderInt = 2
+            }
             dbReference.child(uid).setValue(
                     User(
                             uid.toString(),
@@ -67,19 +96,89 @@ class EditProfileFragment : Fragment() {
                             edit_last_name.text.toString().trim(),
                             null,
                             edit_email.text.toString().trim(),
-                            null,//spinner_language.toString().trim(),
-                            edit_age.text.toString().toInt(),
-                            1//spinner_gender.toString().toInt()
+                            text_select_language_profile.text.toString().trim(),
+                            text_select_age_profile.text.toString().toInt(),
+                            genderInt
                     )
             )
+            Toast.makeText(activity, "Changes Saved", Toast.LENGTH_SHORT)
         })
     }
 
-    fun setLanguage() {
-        //TODO: Set Current Language on Picker
-    }
+    private fun createNumberPicker(type: Int) {
+        when (type) {
+            0 -> {
+                val genderValues = arrayOf("Male", "Female", "Other")
+                val genderPicker = NumberPicker(activity)
+                genderPicker.minValue = 0
+                genderPicker.maxValue = genderValues.size - 1
+                genderPicker.displayedValues = genderValues
+                genderPicker.wrapSelectorWheel = true
 
-    fun setGender() {
-        //TODO: Set Current Gender on Picker
+                val dialogBuilder = AlertDialog.Builder(activity)
+                dialogBuilder.setView(genderPicker)
+                        .setTitle("Select Gender")
+                        .setPositiveButton("Ok") { dialog, which ->
+                            when {
+                                genderPicker.value == 0 -> text_select_gender_profile.text = "Male"
+                                genderPicker.value == 1 -> text_select_gender_profile.text = "Female"
+                                genderPicker.value == 2 -> text_select_gender_profile.text = "Other"
+                            }
+                        }
+                        .setNegativeButton("Cancel") { dialog, which ->
+                            Toast.makeText(activity, "Cancelled", Toast.LENGTH_SHORT).show()
+                        }
+                        .create()
+                        .show()
+            }
+            1 -> {
+                val ageValues = Array(100, { "$it" })
+
+                val agePicker = NumberPicker(activity)
+                agePicker.minValue = 1
+                agePicker.maxValue = 100
+                agePicker.displayedValues = ageValues
+                agePicker.wrapSelectorWheel = true
+
+                val dialogBuilder = AlertDialog.Builder(activity)
+                dialogBuilder.setView(agePicker)
+                        .setTitle("Select Age")
+                        .setPositiveButton("Ok") { dialog, which ->
+                            text_select_age_profile.text = (agePicker.value - 1).toString()
+                        }
+                        .setNegativeButton("Cancel") { dialog, which ->
+                            Toast.makeText(activity, "Cancelled", Toast.LENGTH_SHORT).show()
+                        }
+                        .create()
+                        .show()
+
+            }
+            2 -> {
+                val languageValues = arrayOf("English", "Swedish")
+                val languagePicker = NumberPicker(activity)
+
+                languagePicker.minValue = 0
+                languagePicker.maxValue = languageValues.size - 1
+                languagePicker.displayedValues = languageValues
+                languagePicker.wrapSelectorWheel = false
+
+                val dialogBuilder = AlertDialog.Builder(activity)
+                dialogBuilder.setView(languagePicker)
+                        .setTitle("Select Language")
+                        .setPositiveButton(android.R.string.ok) { dialog, which ->
+                            if (languagePicker.value == 0) {
+                                text_select_language_profile.text = "English"
+                            } else if (languagePicker.value == 1) {
+                                text_select_language_profile.text = "Swedish"
+                            }
+                        }
+                        .setNegativeButton(android.R.string.cancel) { dialog, which ->
+                            Toast.makeText(activity, "Cancelled", Toast.LENGTH_SHORT).show()
+                        }
+                        .create()
+                        .show()
+            }
+            else -> return
+        }
     }
 }
