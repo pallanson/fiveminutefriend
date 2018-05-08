@@ -13,9 +13,6 @@ import kotlinx.android.synthetic.main.fragment_password_change.*
 class PasswordChangeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                           savedInstanceState: Bundle?): View? {
-        if (container != null) {
-            container.removeAllViews()
-        }
         return inflater!!.inflate(R.layout.fragment_password_change, container, false)
     }
 

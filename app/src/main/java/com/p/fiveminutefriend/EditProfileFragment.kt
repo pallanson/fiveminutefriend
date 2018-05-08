@@ -19,10 +19,6 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.*
 class EditProfileFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        //TODO: Fix the activity not returning after hitting back button
-        if (container != null) {
-            container.removeAllViews()
-        }
         return inflater!!.inflate(R.layout.fragment_edit_profile, container, false)
     }
 
@@ -57,7 +53,7 @@ class EditProfileFragment : Fragment() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-
+                Toast.makeText(activity, "Error Retrieving Profile", Toast.LENGTH_SHORT)
             }
         })
 
@@ -80,6 +76,7 @@ class EditProfileFragment : Fragment() {
                     .replace(R.id.layout_profile_view, PasswordChangeFragment)
                     .addToBackStack("Change Password")
                     .commit()
+            Toast.makeText(activity, "Change Password Fragment", Toast.LENGTH_SHORT)
         })
 
         button_save_changes.setOnClickListener({

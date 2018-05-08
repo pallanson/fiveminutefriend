@@ -1,20 +1,16 @@
 package com.p.fiveminutefriend
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.TabLayout
-import android.support.v4.app.ActivityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.p.fiveminutefriend.Adapters.MainActivityPagerAdapter
 import com.p.fiveminutefriend.SignIn.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_match.*
 
 
 class MainActivity: AppCompatActivity() {
@@ -33,10 +29,16 @@ class MainActivity: AppCompatActivity() {
         val logOut = menu.subMenu.getItem(MENU_LOG_OUT_INDEX)
 
         settings.setOnMenuItemClickListener { menuItem ->
-            Toast.makeText(this, "Go to settings", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, ProfileActivity::class.java)
-            intent.putExtra("uid", FirebaseAuth.getInstance().currentUser!!.uid)
-            startActivity(intent)
+            Toast.makeText(this, "Profile Page", Toast.LENGTH_SHORT).show()
+            val profileFragment = ProfileFragment()
+            val manager = supportFragmentManager
+
+            val transaction = manager.beginTransaction()
+            transaction
+                    .replace(R.id.layout_main, profileFragment)
+                    .addToBackStack("Profile")
+                    .commit()
+            fab_new_chat_main_activity.hide()
             true
         }
 
@@ -78,6 +80,7 @@ class MainActivity: AppCompatActivity() {
             }
         })
 
+        //TODO: Redirect fab to filters or remove fab completely.
         fab_new_chat_main_activity.setOnClickListener({
             startActivity(Intent(this, ChatActivity::class.java))
         })
