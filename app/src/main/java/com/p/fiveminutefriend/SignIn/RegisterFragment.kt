@@ -14,6 +14,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.p.fiveminutefriend.*
+import com.p.fiveminutefriend.Model.User
 import kotlinx.android.synthetic.main.fragment_register.*
 
 

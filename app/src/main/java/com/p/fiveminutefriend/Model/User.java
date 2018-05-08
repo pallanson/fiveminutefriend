@@ -1,10 +1,6 @@
-package com.p.fiveminutefriend;
+package com.p.fiveminutefriend.Model;
 
 import android.support.annotation.NonNull;
-
-/**
- * Created by Martin on 01/05/2018.
- */
 
 public class User {
 
@@ -20,6 +16,7 @@ public class User {
     private String language;
     private int age;
     private int gender;
+    private String status;
 
     public User(@NonNull String uid,
                 String firstName,
@@ -38,6 +35,20 @@ public class User {
         this.language = language;
         this.age = age;
         this.gender = gender;
+    }
+
+    //Temporary Constructor for list
+    public User(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getUid() {
