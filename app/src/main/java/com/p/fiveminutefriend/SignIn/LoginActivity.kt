@@ -1,8 +1,13 @@
 package com.p.fiveminutefriend.SignIn
 
+import android.Manifest
 import android.os.Bundle
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.p.fiveminutefriend.MainActivity
@@ -11,9 +16,14 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
+    private val CONTACTS_REQUEST_CODE = 101
+    private val TAG = "Permissions"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        isPermissionGranted()
 
         text_register_login.setOnClickListener({
             val registerFragment = RegisterFragment()
@@ -64,5 +74,43 @@ class LoginActivity : AppCompatActivity() {
                     }
                 })
         }
+
+    private fun isPermissionGranted() : Boolean {
+        return if(Build.VERSION.SDK_INT >= 23) {
+            if(this.checkSelfPermission(android.Manifest.permission.READ_CONTACTS)
+                    == PackageManager.PERMISSION_GRANTED &&
+                    this.checkSelfPermission(android.Manifest.permission.WRITE_CONTACTS)
+                    == PackageManager.PERMISSION_GRANTED) {
+                true
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        arrayOf(Manifest.permission.READ_CONTACTS,
+                                Manifest.permission.WRITE_CONTACTS),
+                        CONTACTS_REQUEST_CODE)
+                false
+            }
+        }
+        else {
+            true
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<out String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when(requestCode) {
+            CONTACTS_REQUEST_CODE -> {
+                if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.v(TAG, "Permission Denied by User")
+                }
+                else {
+                    Log.v(TAG, "Permission Granted by User")
+                }
+            }
+        }
+
+    }
 }
 

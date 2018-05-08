@@ -1,19 +1,20 @@
 package com.p.fiveminutefriend
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.support.v4.app.ActivityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.p.fiveminutefriend.Adapters.MainActivityPagerAdapter
 import com.p.fiveminutefriend.SignIn.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
-
-/**
- * Created by martinhuynh on 05/05/2018.
- */
 
 
 class MainActivity: AppCompatActivity() {
@@ -44,9 +45,9 @@ class MainActivity: AppCompatActivity() {
             true
         }
 
+        tab_layout_main_activity.addTab(tab_layout_main_activity.newTab().setText("Match"))
         tab_layout_main_activity.addTab(tab_layout_main_activity.newTab().setText("Recent"))
         tab_layout_main_activity.addTab(tab_layout_main_activity.newTab().setText("Contacts"))
-        tab_layout_main_activity.addTab(tab_layout_main_activity.newTab().setText("Match Settings"))
         tab_layout_main_activity.tabGravity = TabLayout.GRAVITY_FILL
 
         view_pager_main_activity.overScrollMode = ViewPager.OVER_SCROLL_NEVER
@@ -86,4 +87,5 @@ class MainActivity: AppCompatActivity() {
         FirebaseAuth.getInstance().signOut()
         startActivity(Intent(this, LoginActivity::class.java))
     }
+
 }

@@ -13,7 +13,7 @@ import com.p.fiveminutefriend.R
 /**
  * A simple [Fragment] subclass.
  */
-class MatchSettingsFragment : Fragment() {
+class MatchFragment : Fragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,

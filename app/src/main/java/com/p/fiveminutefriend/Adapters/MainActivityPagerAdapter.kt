@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentStatePagerAdapter
 import com.p.fiveminutefriend.MainTabs.ContactsFragment
-import com.p.fiveminutefriend.MainTabs.MatchSettingsFragment
+import com.p.fiveminutefriend.MainTabs.MatchFragment
 import com.p.fiveminutefriend.MainTabs.RecentFragment
 
 /**
@@ -20,9 +20,9 @@ class MainActivityPagerAdapter(fm: android.support.v4.app.FragmentManager,
     override fun getItem(position: Int): Fragment? {
 
         val fragment: Fragment = when (position) {
-            0 -> RecentFragment()
-            1 -> ContactsFragment()
-            2 -> MatchSettingsFragment()
+            0 -> MatchFragment()
+            1 -> RecentFragment()
+            2 -> ContactsFragment()
             else -> return null
         }
 
