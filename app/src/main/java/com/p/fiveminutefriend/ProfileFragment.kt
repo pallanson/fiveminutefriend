@@ -1,19 +1,27 @@
 package com.p.fiveminutefriend
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        return inflater!!.inflate(R.layout.fragment_profile, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val uid = FirebaseAuth.getInstance().uid
         val userReference = FirebaseDatabase.getInstance().reference.child("Users").child(uid)
@@ -48,15 +56,13 @@ class ProfileActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-
+                Toast.makeText(activity, "Error Retrieving Profile", Toast.LENGTH_SHORT)
             }
         })
 
-
-
         button_edit_profile.setOnClickListener({
             val editProfileFragment = EditProfileFragment()
-            val manager = supportFragmentManager
+            val manager = fragmentManager
 
             val transaction = manager.beginTransaction()
             transaction
