@@ -11,6 +11,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 class ProfileFragment : Fragment() {
@@ -51,8 +52,6 @@ class ProfileFragment : Fragment() {
                 text_birthday_profile.text = "February 3, 1992 (" + age + " years old)"
                 text_gender_profile.text = genderString
                 text_language_profile.text = language
-                //languageText.setText(tempUser.language)
-                //text_gender.setText(tempUser.gender)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -70,5 +69,11 @@ class ProfileFragment : Fragment() {
                     .addToBackStack("Edit")
                     .commit()
         })
+
+        toolbar_profile.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+        toolbar_profile.setNavigationOnClickListener {
+            //fab_new_chat_main_activity.show()
+            fragmentManager.popBackStackImmediate()
+        }
     }
 }
