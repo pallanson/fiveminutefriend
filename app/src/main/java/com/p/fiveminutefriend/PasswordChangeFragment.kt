@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
 import kotlinx.android.synthetic.main.fragment_password_change.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 
 class PasswordChangeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -44,6 +45,11 @@ class PasswordChangeFragment : Fragment() {
                         .show()
             }
         }*/)
+
+        toolbar_password_change.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+        toolbar_password_change.setNavigationOnClickListener {
+            fragmentManager.popBackStackImmediate()
+        }
     }
 }
 

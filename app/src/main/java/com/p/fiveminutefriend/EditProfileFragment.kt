@@ -14,7 +14,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.p.fiveminutefriend.Model.User
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 
 class EditProfileFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -101,6 +103,11 @@ class EditProfileFragment : Fragment() {
             )
             Toast.makeText(activity, "Changes Saved", Toast.LENGTH_SHORT).show()
         })
+
+        toolbar_edit_profile.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+        toolbar_edit_profile.setNavigationOnClickListener {
+            fragmentManager.popBackStackImmediate()
+        }
     }
 
     private fun createNumberPicker(type: Int) {
