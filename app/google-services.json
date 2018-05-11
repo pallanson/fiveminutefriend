@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "454623789994-4ljec0j6gtk41c1f7vbbsqco05f5dm9v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.p.fiveminutefriend",
+            "certificate_hash": "b3d262d31756b18f93c7f70f8ac3359d47bf92b3"
+          }
+        },
+        {
           "client_id": "454623789994-9rm9dfev75c89gq1m7k29sijb33eq730.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
