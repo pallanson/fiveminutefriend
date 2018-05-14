@@ -9,7 +9,7 @@
         app:showAsAction="ifRoom|withText">
         <menu>
             <item
-                android:title="Settings"
+                android:title="Profile"
                 android:id="@+id/action_settings"/>
             <item
                 android:title="Log Out"
