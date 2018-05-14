@@ -1,6 +1,8 @@
 package com.p.fiveminutefriend
 
+import android.app.AlertDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
@@ -80,9 +82,20 @@ class MainActivity: AppCompatActivity() {
             }
         })
 
-        //TODO: Redirect fab to filters or remove fab completely.
         fab_new_chat_main_activity.setOnClickListener({
-            startActivity(Intent(this, ChatActivity::class.java))
+            val matchSettingsDialog = AlertDialog.Builder(this)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                matchSettingsDialog.setView(R.layout.dialog_match_settings)
+            }
+            matchSettingsDialog.setTitle("Match Settings")
+                    .setPositiveButton("Ok") { _, _ ->
+                        Toast.makeText(this, "Settings Changed", Toast.LENGTH_SHORT).show()
+                    }
+                    .setNegativeButton("Cancel") {_, _ ->
+                        Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
+                    }
+                    .create()
+                    .show()
         })
     }
 

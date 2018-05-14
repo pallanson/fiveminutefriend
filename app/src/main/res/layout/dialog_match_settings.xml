@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_gender_match_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Gender"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/checkbox_male_match_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Male"
+        app:layout_constraintStart_toStartOf="@+id/text_gender_match_settings"
+        app:layout_constraintTop_toBottomOf="@+id/text_gender_match_settings" />
+
+    <CheckBox
+        android:id="@+id/checkbox_female_match_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Female"
+        app:layout_constraintStart_toStartOf="@+id/checkbox_male_match_settings"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_male_match_settings" />
+
+    <CheckBox
+        android:id="@+id/checkbox_other_match_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Other"
+        app:layout_constraintStart_toStartOf="@+id/checkbox_female_match_settings"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_female_match_settings" />
+
+    <TextView
+        android:id="@+id/text_age_match_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Age"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_other_match_settings" />
+
+    <CheckBox
+        android:id="@+id/checkbox_18-25_match_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="18-25"
+        app:layout_constraintStart_toStartOf="@+id/text_age_match_settings"
+        app:layout_constraintTop_toBottomOf="@+id/text_age_match_settings" />
+
+    <CheckBox
+        android:id="@+id/checkbox_24-30_match_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="25-30"
+        app:layout_constraintStart_toStartOf="@+id/checkbox_18-25_match_settings"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_18-25_match_settings" />
+
+    <CheckBox
+        android:id="@+id/checkbox_30-35_match_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="30-35"
+        app:layout_constraintStart_toStartOf="@+id/checkbox_24-30_match_settings"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_24-30_match_settings" />
+
+    <CheckBox
+        android:id="@+id/checkbox_over_35_match_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text=">35"
+        app:layout_constraintStart_toStartOf="@+id/checkbox_30-35_match_settings"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_30-35_match_settings" />
+
+    <TextView
+        android:id="@+id/text_language_match_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Language"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_over_35_match_settings" />
+
+    <CheckBox
+        android:id="@+id/checkbox_english_match_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="English"
+        app:layout_constraintStart_toStartOf="@+id/text_language_match_settings"
+        app:layout_constraintTop_toBottomOf="@+id/text_language_match_settings" />
+
+    <CheckBox
+        android:id="@+id/checkbox_swedish_match_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Swedish"
+        app:layout_constraintStart_toStartOf="@+id/checkbox_english_match_settings"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_english_match_settings" />
+</android.support.constraint.ConstraintLayout>
