@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.Toast
 
 import com.github.bassaer.chatmessageview.model.Message
 import com.github.bassaer.chatmessageview.model.ChatUser
@@ -19,7 +20,6 @@ class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
-        setSupportActionBar(toolbar)
         val userIcon = BitmapFactory.decodeResource(this.resources, R.drawable.ic_action_add)
         val user = ChatUser(1, "Friend", userIcon)
         val me = ChatUser(2, "You", userIcon)
@@ -49,6 +49,10 @@ class ChatActivity : AppCompatActivity() {
                 chatView.send(message)
                 chatView.inputText = ""
             })
+        }
+
+        fab_accept_chat.setOnClickListener {
+            Toast.makeText(this, "Accepted!!", Toast.LENGTH_SHORT).show()
         }
     }
 }

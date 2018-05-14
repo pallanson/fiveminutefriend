@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fafafa"
     tools:context="com.p.fiveminutefriend.MainTabs.MatchFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -16,14 +17,30 @@
         android:layout_marginStart="67dp"
         android:layout_marginTop="120dp"
         android:background="@drawable/round_button"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTint="@color/colorAccent"
         android:text="MATCH"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textColor="@color/common_google_signin_btn_text_dark_default"
         android:textSize="46sp"
+        android:transitionName="timer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_filter_match"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:tint="@android:color/background_light"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_build_black_24dp" />
+
 </android.support.constraint.ConstraintLayout>
