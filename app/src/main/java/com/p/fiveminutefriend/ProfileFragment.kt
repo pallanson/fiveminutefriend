@@ -7,25 +7,29 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
+import android.support.v4.content.FileProvider
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*
 import java.io.ByteArrayOutputStream
+import java.io.File
 
 class ProfileFragment : Fragment() {
 
@@ -33,6 +37,7 @@ class ProfileFragment : Fragment() {
     private val IMAGE_FROM_GALLERY = 202
     private val IMAGE_PERMISSIONS_REQUEST_CODE = 1
     private val TAG = "Image Permissions"
+    private lateinit var photoFilePath : String
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -42,6 +47,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        getImageFromFirebase()
         val uid = FirebaseAuth.getInstance().uid
         val userReference = FirebaseDatabase.getInstance().reference.child("Users").child(uid)
 
@@ -64,6 +70,7 @@ class ProfileFragment : Fragment() {
                     }
                     .create()
                     .show()
+
         })
 
         userReference.addValueEventListener(object : ValueEventListener {
@@ -101,7 +108,6 @@ class ProfileFragment : Fragment() {
         button_edit_profile.setOnClickListener({
             val editProfileFragment = EditProfileFragment()
             val manager = fragmentManager
-
             val transaction = manager.beginTransaction()
             transaction
                     .replace(R.id.layout_profile_view, editProfileFragment)
@@ -131,15 +137,18 @@ class ProfileFragment : Fragment() {
 
     private fun imageFromCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val photoFile : File = createProfilePhotoFile()
+        val photoUri = FileProvider.getUriForFile(activity, "com.p.fiveminutefriend.provider", photoFile)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val extras: Bundle = data!!.extras
-            val imageBitmap = extras.get("data")
-            bitmapToImageView(imageBitmap as Bitmap)
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            val image = BitmapFactory.decodeFile(photoFilePath)
+            imageView_picture_profile.setImageBitmap(image)
+            uploadImageToFirebase(image)
         }
 
         if (requestCode == IMAGE_FROM_GALLERY && resultCode == RESULT_OK) {
@@ -151,9 +160,17 @@ class ProfileFragment : Fragment() {
 
     private fun bitmapToImageView(bitmap: Bitmap) {
         uploadImageToFirebase(bitmap)
-        val scalingTool = BitmapScalingTool(imageView_picture_profile.height, true)
-        val scaledBitmap = scalingTool.transform(bitmap)
-        imageView_picture_profile.setImageBitmap(scaledBitmap)
+//        val scalingTool = BitmapScalingTool(imageView_picture_profile.height, true)
+//        val scaledBitmap = scalingTool.transform(bitmap)
+//        imageView_picture_profile.setImageBitmap(scaledBitmap)
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        val path = MediaStore.Images.Media.insertImage(activity.contentResolver,
+                                                            bitmap,
+                                                            "profilePic",
+                                                            null)
+        val imageUri = Uri.parse(path)
+        Picasso.get().load(imageUri).into(imageView_picture_profile)
     }
 
     private fun isImagePermissionGranted() : Boolean {
@@ -197,9 +214,30 @@ class ProfileFragment : Fragment() {
 
     }
 
+    private fun getImageFromFirebase() {
+
+        val storageReference = FirebaseStorage
+                .getInstance()
+                .getReferenceFromUrl(Constants.FIREBASE_STORAGE_REFERENCE)
+
+        storageReference.child("profilePic")
+                .downloadUrl
+                .addOnSuccessListener {
+                    Picasso.get()
+                            .load(it.toString())
+                            .into(imageView_picture_profile)
+                }
+                .addOnFailureListener({
+                    Toast.makeText(activity, "Url for image not found", Toast.LENGTH_SHORT)
+                            .show()
+                })
+
+    }
+
     private fun uploadImageToFirebase(bitmap: Bitmap) {
-        val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(Constants.FIREBASE_STORAGE_REFERENCE)
-        val fileReference = storageReference.child(FirebaseAuth.getInstance().currentUser!!.uid)
+        val storageReference = FirebaseStorage.getInstance()
+                .getReferenceFromUrl(Constants.FIREBASE_STORAGE_REFERENCE)
+        val fileReference = storageReference.child("profilePic")
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
         val data : ByteArray = byteArrayOutputStream.toByteArray()
@@ -214,6 +252,16 @@ class ProfileFragment : Fragment() {
                     .show()
         }
 
+        getImageFromFirebase()
+
+    }
+
+    private fun createProfilePhotoFile() : File {
+        val fileName = "profilePic"
+        val storageDirectory = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(fileName, ".jpg", storageDirectory)
+        photoFilePath = image.absolutePath
+        return image
     }
 }
 
