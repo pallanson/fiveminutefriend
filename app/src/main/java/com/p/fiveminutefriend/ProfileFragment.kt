@@ -115,7 +115,7 @@ class ProfileFragment : Fragment() {
                     .commit()
         })
 
-        toolbar_profile.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+        toolbar_profile.setNavigationIcon(R.drawable.ic_arrow_back_24dp)
         toolbar_profile.setNavigationOnClickListener {
             //fab_new_chat_main_activity.show()
             fragmentManager.popBackStackImmediate()
