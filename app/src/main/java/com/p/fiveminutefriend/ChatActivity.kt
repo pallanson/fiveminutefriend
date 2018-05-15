@@ -17,6 +17,7 @@ import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.content_chat.*
 import kotlinx.android.synthetic.main.fragment_match.*
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 //https://github.com/bassaer/ChatMessageView
@@ -82,8 +83,14 @@ class ChatActivity : AppCompatActivity() {
 
                 override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
                     if (p0 != null) {
+                        val time : Long = if (p0.child("timeSent").value != null) p0.child("timeSent").value as Long else 0
+                        val calendar = Calendar.getInstance()
+                        if (time > 0) {
+                            calendar.timeInMillis = time
+                        }
                         chatView.send(Message.Builder()
                                 .setRight(true)
+                                .setSendTime(calendar)
                                 .setText(p0.child("text").value.toString())
                                 .hideIcon(true)
                                 .setUser(myUser)
@@ -106,8 +113,14 @@ class ChatActivity : AppCompatActivity() {
 
                 override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
                     if (p0 != null) {
+                        val time : Long = if (p0.child("timeSent").value != null) p0.child("timeSent").value as Long else 0
+                        val calendar = Calendar.getInstance()
+                        if (time > 0) {
+                            calendar.timeInMillis = time
+                        }
                         chatView.receive(Message.Builder()
                                 .setRight(false)
+                                .setSendTime(calendar)
                                 .setText(p0.child("text").value.toString())
                                 .hideIcon(false)
                                 .setUser(theirUser)
