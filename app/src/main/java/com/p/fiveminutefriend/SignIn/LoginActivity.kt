@@ -26,13 +26,13 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        //val prefs = LoginPreferences(this)
         isPermissionGranted()
 
         var preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         var editor: SharedPreferences.Editor = preferences.edit()
         var saveLogin = preferences.getBoolean("saveLogin", false)
 
+        // If savedLogin preference is true, fill in Login information
         if (saveLogin) {
             val name = preferences.getString("username", "")
             val pass = preferences.getString("password", "")
@@ -40,19 +40,6 @@ class LoginActivity : AppCompatActivity() {
             edit_password_login.setText(pass)
             checkBox_remember_login.setChecked(true)
         }
-
-        //TODO: Make SharedPreferences work...
-        /*if(checkBox_remember_login.isChecked) {
-            edit_email_login.setText(
-                    prefs.getEmail(),
-                    TextView.BufferType.EDITABLE)
-            edit_password_login.setText(
-                    prefs.getPassword(),
-                    TextView.BufferType.EDITABLE)
-
-            checkBox_remember_login.isChecked = !edit_email_login.text.isBlank()
-                    && !edit_password_login.text.isBlank()
-        }*/
 
         text_register_login.setOnClickListener({
             val registerFragment = RegisterFragment()
@@ -67,12 +54,14 @@ class LoginActivity : AppCompatActivity() {
         })
 
         button_sign_in_login.setOnClickListener({
+            // If 'Remember Me' is checked, save information to SavedPreferences
             if (checkBox_remember_login.isChecked()) {
                 editor.putBoolean("saveLogin", true)
                 editor.putString("username", edit_email_login.text.toString())
                 editor.putString("password", edit_password_login.text.toString())
                 editor.apply()
             } else {
+                // Clear SavedPreferences if checkbox is unchecked
                 editor.clear()
                 editor.apply()
             }
@@ -81,7 +70,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
      fun performLogin() {
-         //val prefs = LoginPreferences(this)
          val emailOrUsername = edit_email_login.text.toString()
          val password = edit_password_login.text.toString()
 
@@ -98,12 +86,6 @@ class LoginActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT).show()
                 return
             }
-
-         //TODO: Make SharedPreferences work...
-            /*if (checkBox_remember_login.isChecked) {
-                prefs.setEmail(edit_email_login.text.toString())
-                prefs.setPassword(edit_password_login.text.toString())
-            }*/
 
             FirebaseAuth.getInstance()
                 .signInWithEmailAndPassword(emailOrUsername, password)

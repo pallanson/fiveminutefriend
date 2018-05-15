@@ -7,14 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
 import com.p.fiveminutefriend.SignIn.LoginActivity
 import kotlinx.android.synthetic.main.fragment_password_change.*
-import android.support.annotation.NonNull
-import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.AuthCredential
 
 
 class PasswordChangeFragment : Fragment() {
@@ -57,5 +52,3 @@ class PasswordChangeFragment : Fragment() {
         }
     }
 }
-
-private fun Any.addOnCompleteListener(function: (Task<AuthResult>) -> Unit) {}
