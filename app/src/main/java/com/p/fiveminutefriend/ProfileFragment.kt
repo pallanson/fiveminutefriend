@@ -37,7 +37,7 @@ class ProfileFragment : Fragment() {
     private val IMAGE_FROM_GALLERY = 202
     private val IMAGE_PERMISSIONS_REQUEST_CODE = 1
     private val TAG = "Image Permissions"
-    private lateinit var photoFilePath : String
+    private lateinit var photoFilePath: String
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -56,12 +56,12 @@ class ProfileFragment : Fragment() {
             pictureDialog.setTitle("Upload Image")
                     .setMessage("Upload from Camera or from Gallery?")
                     .setPositiveButton("From Camera") { _, _ ->
-                        if(isImagePermissionGranted()) {
+                        if (isImagePermissionGranted()) {
                             imageFromCamera()
                         }
                     }
                     .setNegativeButton("From Gallery") { _, _ ->
-                        if(isImagePermissionGranted()){
+                        if (isImagePermissionGranted()) {
                             imageFromGallery()
                         }
                     }
@@ -137,7 +137,7 @@ class ProfileFragment : Fragment() {
 
     private fun imageFromCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val photoFile : File = createProfilePhotoFile()
+        val photoFile: File = createProfilePhotoFile()
         val photoUri = FileProvider.getUriForFile(activity, "com.p.fiveminutefriend.provider", photoFile)
         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
@@ -166,16 +166,16 @@ class ProfileFragment : Fragment() {
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
         val path = MediaStore.Images.Media.insertImage(activity.contentResolver,
-                                                            bitmap,
-                                                            "profilePic",
-                                                            null)
+                bitmap,
+                "profilePic",
+                null)
         val imageUri = Uri.parse(path)
         Picasso.get().load(imageUri).into(imageView_picture_profile)
     }
 
-    private fun isImagePermissionGranted() : Boolean {
-        return if(Build.VERSION.SDK_INT >= 23) {
-            if(activity.checkSelfPermission(android.Manifest.permission.CAMERA)
+    private fun isImagePermissionGranted(): Boolean {
+        return if (Build.VERSION.SDK_INT >= 23) {
+            if (activity.checkSelfPermission(android.Manifest.permission.CAMERA)
                     == PackageManager.PERMISSION_GRANTED &&
                     activity.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED &&
@@ -190,8 +190,7 @@ class ProfileFragment : Fragment() {
                         IMAGE_PERMISSIONS_REQUEST_CODE)
                 false
             }
-        }
-        else {
+        } else {
             true
         }
     }
@@ -201,12 +200,11 @@ class ProfileFragment : Fragment() {
                                             grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        when(requestCode) {
+        when (requestCode) {
             IMAGE_PERMISSIONS_REQUEST_CODE -> {
-                if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Log.v(TAG, "Permission Denied by User")
-                }
-                else {
+                } else {
                     Log.v(TAG, "Permission Granted by User")
                 }
             }
@@ -240,7 +238,7 @@ class ProfileFragment : Fragment() {
         val fileReference = storageReference.child("profilePic")
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-        val data : ByteArray = byteArrayOutputStream.toByteArray()
+        val data: ByteArray = byteArrayOutputStream.toByteArray()
 
         val uploadTask = fileReference.putBytes(data)
         uploadTask.addOnFailureListener({
@@ -256,7 +254,7 @@ class ProfileFragment : Fragment() {
 
     }
 
-    private fun createProfilePhotoFile() : File {
+    private fun createProfilePhotoFile(): File {
         val fileName = "profilePic"
         val storageDirectory = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val image = File.createTempFile(fileName, ".jpg", storageDirectory)

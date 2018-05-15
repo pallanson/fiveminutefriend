@@ -6,6 +6,7 @@
     android:id="@+id/layout_profile_edit"
     android:background="#FFF"
     android:clickable="true"
+    android:elevation="15dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.Toolbar
@@ -18,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Five Minute Friend - Edit Profile"
+        app:title="Edit Profile"
         app:titleTextColor="@android:color/background_light" />
 
     <EditText
