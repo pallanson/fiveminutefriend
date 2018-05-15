@@ -13,9 +13,8 @@ public class Message {
 
     public String text = "";
     public int msgType = 0;
-    public String sender;
-    public String receiver;
     public int deliveryStatus = 0;
+    public String sender;
     public long timeSent;
     public long timeReceived;
 
@@ -23,11 +22,10 @@ public class Message {
         timeReceived = new Date().getTime();
     }
 
-    public Message(String text, int msgType, String sender, String receiver, int deliveryStatus, long timeSent) {
+    public Message(String text, int msgType, String sender, int deliveryStatus, long timeSent) {
         this.text = text;
         this.msgType = msgType;
         this.sender = sender;
-        this.receiver = receiver;
         this.timeSent = timeSent;
         this.deliveryStatus = deliveryStatus;
 
@@ -68,14 +66,6 @@ public class Message {
 
     public void setSender(String sender) {
         this.sender = sender;
-    }
-
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
     }
 
     public int getDeliveryStatus() {
