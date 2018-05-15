@@ -13,7 +13,7 @@ class AppMessagingService : FirebaseMessagingService() {
         val data = remoteMessage!!.data
         if (data["title"] == "You have a new match!") {
             val intent = Intent(this, ChatActivity::class.java)
-            intent.extras.putString("matchId",data["matchId"])
+            intent.putExtra("matchId",data["matchId"])
 
             startActivity(intent)
         }
