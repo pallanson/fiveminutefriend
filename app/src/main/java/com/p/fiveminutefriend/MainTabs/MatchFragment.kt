@@ -26,8 +26,6 @@ import kotlinx.android.synthetic.main.fragment_match.*
  */
 class MatchFragment : Fragment() {
 
-    val match = Match(0, 100, 7, arrayListOf("English", "Swedish", "Language"), 25, 0, "English", FirebaseInstanceId.getInstance().token)
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val database = FirebaseDatabase.getInstance().reference.child("Matches")
@@ -68,6 +66,7 @@ class MatchFragment : Fragment() {
             reference.addListenerForSingleValueEvent(object : ValueEventListener {
                 @SuppressLint("SetTextI18n")
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val match = Match(0, 100, 7, arrayListOf("English", "Swedish", "Language"), 25, 0, "English", FirebaseInstanceId.getInstance().token)
                     if (!dataSnapshot.exists()) {
                         reference.setValue(match)
                     } else {
