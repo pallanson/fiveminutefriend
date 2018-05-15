@@ -17,6 +17,7 @@ public class User {
     private int age;
     private int gender;
     private String status;
+    private String FCMToken;
 
     public User(@NonNull String uid,
                 String firstName,
@@ -113,5 +114,13 @@ public class User {
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public String getFCMToken() {
+        return FCMToken;
+    }
+
+    public void setFCMToken(String FCMToken) {
+        this.FCMToken = FCMToken;
     }
 }
