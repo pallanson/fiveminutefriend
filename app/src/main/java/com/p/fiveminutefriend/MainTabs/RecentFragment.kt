@@ -6,9 +6,11 @@ import android.renderscript.Sampler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.github.bassaer.chatmessageview.model.ChatUser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -45,53 +47,65 @@ class RecentFragment : Fragment() {
     }
 
     private fun createTempList(): List<User> {
+
         val user = FirebaseAuth.getInstance().currentUser
         val uid = user!!.uid
-        val recentRef = FirebaseDatabase.getInstance().reference.child("Users/$uid/matches")
-        val recentMatches = ArrayList<User>()
+        val chatRef = FirebaseDatabase.getInstance().reference.child("Messages/$uid")
+        //var recentMatches: MutableList<User> = arrayListOf<User>()
+        var recentMatches = ArrayList<User>()
 
-        recentRef.addListenerForSingleValueEvent( object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (matches in dataSnapshot.children) {
-                        val matchRef = FirebaseDatabase.getInstance().reference.child("Users/$matches")
+        chatRef.addListenerForSingleValueEvent( object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot?) {
+                if (p0 != null) {
+                    for (matches in p0.children) {
+                        val matchRef = FirebaseDatabase.getInstance().reference.child("Users/${matches.key}")
 
                         matchRef.addValueEventListener( object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                if (dataSnapshot.exists()) {
-                                    val recentsIterator = dataSnapshot.children.iterator()
+                                val firstName = dataSnapshot.child("firstName").value.toString()
+                                val lastName = dataSnapshot.child("lastName").value.toString()
 
-                                    while (recentsIterator.hasNext()) {
-                                        val contactsSnapshot = recentsIterator.next()
+                                val p0 = User(firstName, lastName)
+                                Toast.makeText(activity, p0.firstName, Toast.LENGTH_LONG).show()
 
-                                        val matchedUser = User(
-                                                contactsSnapshot.child("uid").value.toString(),
-                                                contactsSnapshot.child("firstName").value.toString(),
-                                                contactsSnapshot.child("lastName").value.toString(),
-                                                contactsSnapshot.child("username").value.toString(),
-                                                contactsSnapshot.child("email").value.toString(),
-                                                contactsSnapshot.child("language").value.toString(),
-                                                //TODO: Figure out how to pass in information from Firebase as Int and not Any?
-                                                26,
-                                                0
-                                        )
-                                        recentMatches.add(matchedUser)
-                                    }
-                                }
+                                recentMatches.add(p0)
                             }
-                            override fun onCancelled(databaseError: DatabaseError) {
 
+                            override fun onCancelled(databaseError: DatabaseError) {
                             }
                         })
                     }
-                    /*theirUser = ChatUser(1, dataSnapshot.child("username").value.toString(), userIcon)
-                    canChat = dataSnapshot.hasChild("matches/$uid")*/
+
                 }
             }
-            override fun onCancelled(databaseError: DatabaseError) {
+
+            override fun onCancelled(p0: DatabaseError?) {
 
             }
         })
+
+        /*chatRef.addChildEventListener( object: ChildEventListener {
+            override fun onChildMoved(p0: DataSnapshot?, p1: String?) {
+
+            }
+
+            override fun onChildChanged(p0: DataSnapshot?, p1: String?) {
+
+            }
+
+            override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
+
+            }
+
+            override fun onChildRemoved(p0: DataSnapshot?) {
+
+            }
+
+            override fun onCancelled(p0: DatabaseError?) {
+
+            }
+        })*/
+
         return recentMatches
         /*listOf<User>(User("Abbey", "Anderson"),
                 User("Benedict", "Benson"),
