@@ -30,8 +30,6 @@ class RecentFragmentListAdapter(private val items: List<User>,
         return ViewHolder(v)
     }
 
-
-
     override fun getItemCount(): Int {
         return items.size
     }

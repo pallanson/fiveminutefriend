@@ -59,7 +59,7 @@ class ChatActivity : AppCompatActivity() {
             userRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        matchTime = dataSnapshot.child("matches/$matchId").value as Long
+                        //matchTime = dataSnapshot.child("matches/$matchId").value as Long
                         handler.postDelayed(object : Runnable {
                             override fun run() {
                                 timer = 300000 - (System.currentTimeMillis() - matchTime)

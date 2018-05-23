@@ -1,6 +1,7 @@
 package com.p.fiveminutefriend.MainTabs
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
@@ -16,6 +17,7 @@ import com.p.fiveminutefriend.R
 import com.p.fiveminutefriend.Model.User
 import kotlinx.android.synthetic.main.fragment_recent.*
 import com.google.firebase.database.DataSnapshot
+import com.p.fiveminutefriend.ChatActivity
 import com.p.fiveminutefriend.ContactProfileFragment
 
 
@@ -41,16 +43,9 @@ class RecentFragment : Fragment() {
             override fun onItemClick(item: User) {
                 val contactUID = item.uid
 
-                val contactProfileFragment = ContactProfileFragment()
-                val bundle = Bundle()
-                bundle.putString("uid", contactUID)
-                //contactProfileFragment.arguments(bundle)
-                val manager = fragmentManager
-                val transaction = manager.beginTransaction()
-                transaction
-                        .replace(R.id.layout_recent, contactProfileFragment)
-                        .addToBackStack("View Contact")
-                        .commit()
+                val intent = Intent(activity, ChatActivity::class.java)
+                intent.putExtra("matchId", contactUID)
+                startActivity(intent)
             }
         })
     }
