@@ -66,9 +66,10 @@ class RecentFragment : Fragment() {
                                 val lastName = dataSnapshot.child("lastName").value.toString()
 
                                 val p0 = User(firstName, lastName)
-                                Toast.makeText(activity, p0.firstName, Toast.LENGTH_LONG).show()
-
+                                //Toast.makeText(activity, p0.firstName, Toast.LENGTH_LONG).show()
                                 recentMatches.add(p0)
+                                recyclerview_recent.adapter.notifyItemInserted(recentMatches.size - 1);
+
                             }
 
                             override fun onCancelled(databaseError: DatabaseError) {
