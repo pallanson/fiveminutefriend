@@ -34,10 +34,12 @@ class MatchFragment : Fragment() {
         val reference = database.child(key)
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    button_match.text = "MATCHING"
-                } else {
-                    button_match.text = "MATCH"
+                if (button_match != null) {
+                    if (dataSnapshot.exists()) {
+                        button_match.text = "MATCHING"
+                    } else {
+                        button_match.text = "MATCH"
+                    }
                 }
             }
 

@@ -6,13 +6,19 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
+import android.view.View.OnClickListener
 import android.widget.Toast
 
 import com.github.bassaer.chatmessageview.model.Message
 import com.github.bassaer.chatmessageview.model.ChatUser
+import com.google.android.gms.tasks.Continuation
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.database.*
+import com.google.firebase.functions.FirebaseFunctionsException
+import com.google.firebase.functions.HttpsCallableResult
 
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.content_chat.*
@@ -147,12 +153,21 @@ class ChatActivity : AppCompatActivity() {
         chatView.setMessageMarginTop(5)
 
         with(chatView) {
-            setOnClickSendButtonListener(View.OnClickListener {
-                if (canChat && timer > 0) {
-                    val ref = FirebaseDatabase.getInstance().reference.child("Messages/$uid/$matchId")
-                    val message = com.p.fiveminutefriend.Model.Message(chatView.inputText, 0, uid, 0, System.currentTimeMillis())
-                    val newMessageRef = ref.push()
-                    newMessageRef.setValue(message)
+            setOnClickSendButtonListener(OnClickListener {
+                if (chatView.inputText.isNotEmpty()) {
+                    val data = HashMap<String, Any>()
+                    data["receiverUid"] = matchId
+                    data["msgType"] = 0
+                    data["text"] = chatView.inputText
+                    data["timeSent"] = System.currentTimeMillis()
+                    FirebaseFunctions.getInstance()
+                            .getHttpsCallable("sendMessage")
+                            .call(data)
+                            .addOnCompleteListener({
+                                if (!it.isSuccessful) {
+                                    val ffe: FirebaseFunctionsException = it.exception as FirebaseFunctionsException
+                                }
+                            })
                     chatView.inputText = ""
                 }
             })
