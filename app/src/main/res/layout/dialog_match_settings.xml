@@ -44,50 +44,14 @@
         app:layout_constraintTop_toBottomOf="@+id/checkbox_female_match_settings" />
 
     <TextView
-        android:id="@+id/text_age_match_settings"
+        android:id="@+id/textymctextface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:text="Age"
+        android:text="Minimum Age"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/checkbox_other_match_settings" />
-
-    <CheckBox
-        android:id="@+id/checkbox_18-25_match_settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="18-25"
-        app:layout_constraintStart_toStartOf="@+id/text_age_match_settings"
-        app:layout_constraintTop_toBottomOf="@+id/text_age_match_settings" />
-
-    <CheckBox
-        android:id="@+id/checkbox_24-30_match_settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="25-30"
-        app:layout_constraintStart_toStartOf="@+id/checkbox_18-25_match_settings"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_18-25_match_settings" />
-
-    <CheckBox
-        android:id="@+id/checkbox_30-35_match_settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="30-35"
-        app:layout_constraintStart_toStartOf="@+id/checkbox_24-30_match_settings"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_24-30_match_settings" />
-
-    <CheckBox
-        android:id="@+id/checkbox_over_35_match_settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text=">35"
-        app:layout_constraintStart_toStartOf="@+id/checkbox_30-35_match_settings"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_30-35_match_settings" />
 
     <TextView
         android:id="@+id/text_language_match_settings"
@@ -97,7 +61,7 @@
         android:layout_marginTop="24dp"
         android:text="Language"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_over_35_match_settings" />
+        app:layout_constraintTop_toBottomOf="@+id/text_select_maxAge_filter" />
 
     <CheckBox
         android:id="@+id/checkbox_english_match_settings"
@@ -116,4 +80,40 @@
         android:text="Swedish"
         app:layout_constraintStart_toStartOf="@+id/checkbox_english_match_settings"
         app:layout_constraintTop_toBottomOf="@+id/checkbox_english_match_settings" />
+
+    <TextView
+        android:id="@+id/text_select_minAge_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Select"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textymctextface" />
+
+    <TextView
+        android:id="@+id/textytext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Maximum Age"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_select_minAge_filter" />
+
+    <TextView
+        android:id="@+id/text_select_maxAge_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Select"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textytext" />
 </android.support.constraint.ConstraintLayout>

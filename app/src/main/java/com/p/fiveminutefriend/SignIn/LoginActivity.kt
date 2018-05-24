@@ -53,6 +53,18 @@ class LoginActivity : AppCompatActivity() {
                     .commit()
         })
 
+        text_reset_password.setOnClickListener({
+            val passwordResetFragment = PasswordResetFragment()
+            val manager = supportFragmentManager
+
+            val transaction = manager.beginTransaction()
+            transaction
+                    .replace(R.id.layout_login_content_login,
+                            passwordResetFragment)
+                    .addToBackStack("Password Reset")
+                    .commit()
+        })
+
         button_sign_in_login.setOnClickListener({
             // If 'Remember Me' is checked, save information to SavedPreferences
             if (checkBox_remember_login.isChecked()) {
