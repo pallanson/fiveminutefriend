@@ -39,9 +39,11 @@ public class User {
     }
 
     //Temporary Constructor for list
-    public User(String firstName, String lastName) {
+    public User(String uid, String firstName, String lastName) {
+        this.uid = uid;
         this.firstName = firstName;
         this.lastName = lastName;
+
     }
 
     public String getStatus() {

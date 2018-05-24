@@ -65,10 +65,11 @@ class RecentFragment : Fragment() {
 
                         matchRef.addValueEventListener(object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                val matchUID = dataSnapshot.child("uid").value.toString()
                                 val firstName = dataSnapshot.child("firstName").value.toString()
                                 val lastName = dataSnapshot.child("lastName").value.toString()
 
-                                val p0 = User(firstName, lastName)
+                                val p0 = User(firstName, lastName, matchUID)
                                 recentMatches.add(p0)
                                 recyclerview_recent.adapter.notifyItemInserted(recentMatches.size - 1)
                             }
