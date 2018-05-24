@@ -30,12 +30,14 @@ import java.util.concurrent.TimeUnit
 class ChatActivity : AppCompatActivity() {
 
     var canChat = true
+    var isFriend = false
     var timer : Long = 0
     var matchTime : Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val matchId = intent.getStringExtra("matchId")
+        isFriend = intent.getBooleanExtra("isFriend", false)
         val userIcon = BitmapFactory.decodeResource(this.resources, R.drawable.ic_action_add)
         val user = FirebaseAuth.getInstance().currentUser
         val uid = user!!.uid
@@ -50,11 +52,20 @@ class ChatActivity : AppCompatActivity() {
             val userRef = FirebaseDatabase.getInstance().reference.child("Users/$uid")
             val sentRef = FirebaseDatabase.getInstance().reference.child("Messages/$uid/$matchId").orderByChild("timeSent")
             val receiveRef = FirebaseDatabase.getInstance().reference.child("Messages/$matchId/$uid").orderByChild("timeSent")
+            if (isFriend){
+                fab_refuse_chat.hide();
+                fab_accept_chat.hide();
+                text_timer_chat.text = ""
+            }
             matchRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
                         theirUser = ChatUser(1, dataSnapshot.child("username").value.toString(), userIcon)
-                        canChat = dataSnapshot.hasChild("matches/$uid")
+                        canChat = dataSnapshot.hasChild("matches/$uid") || dataSnapshot.hasChild("friends/$uid")
+                        chatView.setEnableSendButton(canChat)
+                        if (dataSnapshot.hasChild("friends/$uid")){
+                            text_username.text = theirUser.getName()
+                        }
                     }
                 }
 
@@ -65,17 +76,42 @@ class ChatActivity : AppCompatActivity() {
             userRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        matchTime = dataSnapshot.child("matches/$matchId").value as Long
-                        handler.postDelayed(object : Runnable {
-                            override fun run() {
-                                timer = 300000 - (System.currentTimeMillis() - matchTime)
-                                if (timer > 0) {
-                                    text_timer_chat.text = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(timer) % TimeUnit.HOURS.toMinutes(1),
-                                            TimeUnit.MILLISECONDS.toSeconds(timer) % TimeUnit.MINUTES.toSeconds(1))
-                                    handler.postDelayed(this, delay)
+                        if (dataSnapshot.hasChild("matches/$matchId")) {
+                            matchTime = dataSnapshot.child("matches/$matchId").value as Long
+                            handler.postDelayed(object : Runnable {
+                                override fun run() {
+                                    if (!isFriend) {
+                                        timer = 300000 - (System.currentTimeMillis() - matchTime)
+                                        if (timer > 0) {
+                                            if (canChat) {
+                                                text_timer_chat.text = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(timer) % TimeUnit.HOURS.toMinutes(1),
+                                                        TimeUnit.MILLISECONDS.toSeconds(timer) % TimeUnit.MINUTES.toSeconds(1))
+                                            }
+                                            handler.postDelayed(this, delay)
+                                        }
+                                    } else {
+                                        text_timer_chat.text = ""
+                                    }
                                 }
-                            }
-                        }, delay)
+                            }, delay)
+                        }
+                        else if (dataSnapshot.hasChild("friends/$matchId")) {
+                            fab_refuse_chat.hide()
+                            fab_accept_chat.hide()
+                            text_timer_chat.text = ""
+                            isFriend = true
+                        }
+                        else {
+                            fab_refuse_chat.hide()
+                            fab_accept_chat.hide()
+                            canChat = false
+                            chatView.send(Message.Builder()
+                                    .setRight(false)
+                                    .setUser(theirUser)
+                                    .setText(theirUser.getName() + " has left the conversation.")
+                                    .hideIcon(true)
+                                    .build())
+                        }
                     }
                 }
 
@@ -174,7 +210,23 @@ class ChatActivity : AppCompatActivity() {
         }
 
         fab_accept_chat.setOnClickListener {
-            Toast.makeText(this, "Accepted!!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Friend request sent", Toast.LENGTH_SHORT).show()
+            val ref = FirebaseDatabase.getInstance().reference.child("FriendRequests/$uid/$matchId")
+            ref.setValue(System.currentTimeMillis())
         }
+
+        fab_refuse_chat.setOnClickListener({
+            val data = HashMap<String, Any>()
+            data["matchId"] = matchId
+            this.onBackPressed();
+            FirebaseFunctions.getInstance()
+                    .getHttpsCallable("skipMatch")
+                    .call(data)
+                    .addOnCompleteListener({
+                        if (!it.isSuccessful) {
+                            val ffe: FirebaseFunctionsException = it.exception as FirebaseFunctionsException
+                        }
+                    })
+        })
     }
 }
