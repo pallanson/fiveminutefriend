@@ -76,7 +76,13 @@ class ChatActivity : AppCompatActivity() {
             userRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        if (dataSnapshot.hasChild("matches/$matchId")) {
+                        if (dataSnapshot.hasChild("friends/$matchId")) {
+                            fab_refuse_chat.hide()
+                            fab_accept_chat.hide()
+                            text_timer_chat.text = ""
+                            isFriend = true
+                        }
+                        else if (dataSnapshot.hasChild("matches/$matchId")) {
                             matchTime = dataSnapshot.child("matches/$matchId").value as Long
                             handler.postDelayed(object : Runnable {
                                 override fun run() {
@@ -94,12 +100,6 @@ class ChatActivity : AppCompatActivity() {
                                     }
                                 }
                             }, delay)
-                        }
-                        else if (dataSnapshot.hasChild("friends/$matchId")) {
-                            fab_refuse_chat.hide()
-                            fab_accept_chat.hide()
-                            text_timer_chat.text = ""
-                            isFriend = true
                         }
                         else {
                             fab_refuse_chat.hide()
