@@ -50,28 +50,33 @@ class RecentFragment : Fragment() {
         })
     }
 
+    private fun addUser(list : ArrayList<User> , user : User){
+        list.add(user)
+        recyclerview_recent.adapter.notifyItemInserted(list.size - 1)
+    }
+
     private fun createTempList(): List<User> {
 
         val user = FirebaseAuth.getInstance().currentUser
         val uid = user!!.uid
-        val chatRef = FirebaseDatabase.getInstance().reference.child("Messages/$uid")
+        val chatRef = FirebaseDatabase.getInstance().reference.child("Messages")
         var recentMatches = ArrayList<User>()
 
-        chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(p0: DataSnapshot?) {
-                if (p0 != null) {
-                    for (matches in p0.children) {
-                        val matchRef = FirebaseDatabase.getInstance().reference.child("Users/${matches.key}")
+        chatRef.addChildEventListener(object : ChildEventListener {
+            override fun onCancelled(p0: DatabaseError?) {
+            }
 
+            override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
+                if (p0 != null) {
+                    if (p0.key != uid && p0.hasChild(uid)){
+                        val matchRef = FirebaseDatabase.getInstance().reference.child("Users/${p0.key}")
                         matchRef.addValueEventListener(object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
                                 val matchUID = dataSnapshot.child("uid").value.toString()
                                 val firstName = dataSnapshot.child("firstName").value.toString()
                                 val lastName = dataSnapshot.child("lastName").value.toString()
 
-                                val p0 = User(firstName, lastName, matchUID)
-                                recentMatches.add(p0)
-                                recyclerview_recent.adapter.notifyItemInserted(recentMatches.size - 1)
+                                addUser(recentMatches, User(firstName, lastName, matchUID))
                             }
 
                             override fun onCancelled(databaseError: DatabaseError) {
@@ -81,9 +86,16 @@ class RecentFragment : Fragment() {
                 }
             }
 
-            override fun onCancelled(p0: DatabaseError?) {
+            override fun onChildChanged(p0: DataSnapshot?, p1: String?) {
+            }
+
+            override fun onChildMoved(p0: DataSnapshot?, p1: String?) {
+            }
+
+            override fun onChildRemoved(p0: DataSnapshot?) {
             }
         })
+
         return recentMatches
     }
 }
