@@ -3,12 +3,19 @@ package com.p.fiveminutefriend.MainTabs
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.renderscript.Sampler
 import android.support.v4.app.Fragment
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.ListView
 import android.widget.NumberPicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -28,12 +35,15 @@ import kotlinx.android.synthetic.main.fragment_match.*
  */
 class MatchFragment : Fragment() {
 
+    lateinit var testCheckbox: CheckBox
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val database = FirebaseDatabase.getInstance().reference.child("Matches")
         val user = FirebaseAuth.getInstance().currentUser
         val key = user!!.uid
         val reference = database.child(key)
+
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -52,27 +62,44 @@ class MatchFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var match : Match
+        var preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
+        var editor: SharedPreferences.Editor = preferences.edit()
+        val user = FirebaseAuth.getInstance().currentUser
+        val key = user!!.uid
 
-        match = Match(0, 100, 7, arrayListOf("English", "Swedish", "Language"),
-                25, 0, "English", FirebaseInstanceId.getInstance().token)
+        val userRef = FirebaseDatabase.getInstance().reference.child("Users/$key")
+        userRef.addListenerForSingleValueEvent( object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot?) {
+                if (p0 != null) {
+                    editor.putInt("myAge", p0.child("age").value.toString().toInt())
+                    editor.putInt("myGender", p0.child("gender").value.toString().toInt())
+                    editor.putString("myLanguage", p0.child("language").value.toString().trim())
+                }
+            }
 
-        text_select_minAge_filter.setOnClickListener({
-            createNumberPicker(0)
-        })
-        text_select_maxAge_filter.setOnClickListener({
-            createNumberPicker(1)
+            override fun onCancelled(p0: DatabaseError?) {
+
+            }
         })
 
         button_match.setOnClickListener({
             val database = FirebaseDatabase.getInstance().reference.child("Matches")
-            val user = FirebaseAuth.getInstance().currentUser
-            val key = user!!.uid
+
             val reference = database.child(key)
             reference.addListenerForSingleValueEvent(object : ValueEventListener {
                 @SuppressLint("SetTextI18n")
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (!dataSnapshot.exists()) {
+                        val defaultLanguages = setOf<String>("English", "Swedish", "Language")
+                        val match = Match(
+                                preferences.getInt("minAge", 0),
+                                preferences.getInt("maxAge", 100),
+                                preferences.getInt("matchGender", 7),
+                                preferences.getStringSet("languages", defaultLanguages) as List<String>,
+                                preferences.getInt("myAge", 26),
+                                preferences.getInt("myGender", 2),
+                                preferences.getString("myLanguage", "English"),
+                                FirebaseInstanceId.getInstance().token)
                         reference.setValue(match)
                     } else {
                         reference.removeValue()
@@ -86,22 +113,48 @@ class MatchFragment : Fragment() {
         })
 
         fab_filter_match.setOnClickListener({
+            val genderList = arrayOf<CharSequence>("English", "Swedish", "Language")
+            val genderChecked = BooleanArray(false, false, false)
+
             val matchSettingsDialog = AlertDialog.Builder(context)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 matchSettingsDialog.setView(R.layout.dialog_match_settings)
             }
+
+            matchSettingsDialog.setMultiChoiceItems(genderList, genderChecked, {
+                fun onClick(dialogInterface: DialogInterface, id : Int, checked : Boolean) {
+
+                }
+            })
+
+            var matchGender = 0
+            var minAge = 0
+            var maxAge = 0
+            var matchLanguage = arrayListOf<String>()
             matchSettingsDialog.setTitle("Match Settings")
-                    .setPositiveButton("Ok") { _, _ ->
+                    .setPositiveButton("Ok", {
+                                    if (id == 0) {
+                                        matchGender += 1
+                                    }
+                                    if (id == 1) {
+                                        matchGender += 2
+                                    }
+                                    if (id == 2) {
+                                        matchGender += 4
+                                    }
+                                    if(id != 0 || id != 1 || id != 2)
+                                        matchGender = 7
+                            }) { _, _ ->
                         var matchGender = 0
                         var minAge = 0
                         var maxAge = 0
                         var matchLanguage = arrayListOf<String>()
 
                         // Get Gender Selection
-
-                        if (checkbox_male_match_settings.isChecked) {
+                        /*if (checkbox_male_match_settings.isChecked) {
                             matchGender += 1
-                        }
+                        } else
+                            matchGender += 0
                         if (checkbox_female_match_settings.isChecked) {
                             matchGender += 2
                         }
@@ -112,9 +165,16 @@ class MatchFragment : Fragment() {
                                 !checkbox_female_match_settings.isChecked &&
                                 !checkbox_other_match_settings.isChecked) {
                             matchGender = 7
-                        }
+                        }*/
 
                         // Get Age Selection
+
+                        text_select_minAge_filter.setOnClickListener({
+                            createNumberPicker(0)
+                        })
+                        text_select_maxAge_filter.setOnClickListener({
+                            createNumberPicker(1)
+                        })
 
                         minAge = text_select_minAge_filter.text.toString().toInt()
                         maxAge = text_select_maxAge_filter.text.toString().toInt()
@@ -126,8 +186,12 @@ class MatchFragment : Fragment() {
                         if (checkbox_swedish_match_settings.isChecked)
                             matchLanguage.add("Swedish")
 
-                        match = Match(minAge, maxAge, matchGender, matchLanguage,
-                                25, 0, "English", FirebaseInstanceId.getInstance().token)
+                        editor.putInt("matchGender", matchGender)
+                        editor.putInt("minAge", minAge)
+                        editor.putInt("maxAge", maxAge)
+                        editor.putStringSet("languages", matchLanguage as Set<String>)
+                        editor.apply()
+
                         Toast.makeText(context, "Settings Changed", Toast.LENGTH_SHORT).show()
                     }
                     .setNegativeButton("Cancel") { _, _ ->
