@@ -10,17 +10,27 @@
     <RelativeLayout
         android:id="@+id/container_timer_chat"
         android:layout_width="match_parent"
-        android:layout_height="143dp"
+        android:layout_height="70dp"
         android:background="@color/colorPrimary">
+
         <TextView
             android:id="@+id/text_timer_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="04:37"
+            android:text="05:00"
             android:textColor="@color/white"
             android:textSize="36dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="36dp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <android.support.design.widget.CoordinatorLayout
@@ -49,5 +59,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/container_timer_chat"
         app:srcCompat="@drawable/ic_check_black_24dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_refuse_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:tint="@color/white"
+        android:transitionName="timer"
+        app:layout_constraintBottom_toBottomOf="@id/container_timer_chat"
+        app:layout_constraintEnd_toStartOf="@+id/fab_accept_chat"
+        app:layout_constraintTop_toBottomOf="@+id/container_timer_chat"
+        app:layout_constraintVertical_bias="0.25"
+        app:srcCompat="@drawable/ic_close_black_24dp" />
 
 </android.support.constraint.ConstraintLayout>
