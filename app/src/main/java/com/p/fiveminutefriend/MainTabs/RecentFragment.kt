@@ -76,7 +76,7 @@ class RecentFragment : Fragment() {
                                 val firstName = dataSnapshot.child("firstName").value.toString()
                                 val lastName = dataSnapshot.child("lastName").value.toString()
 
-                                addUser(recentMatches, User(firstName, lastName, matchUID))
+                                addUser(recentMatches, User(matchUID, firstName, lastName))
                             }
 
                             override fun onCancelled(databaseError: DatabaseError) {
