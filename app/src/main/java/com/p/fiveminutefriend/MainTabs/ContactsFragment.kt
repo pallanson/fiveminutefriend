@@ -2,6 +2,7 @@ package com.p.fiveminutefriend.MainTabs
 
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -13,14 +14,25 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.bassaer.chatmessageview.model.Message
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import com.google.firebase.iid.FirebaseInstanceId
+import com.p.fiveminutefriend.Adapters.ContactsFragmentListAdapter
+import com.p.fiveminutefriend.Adapters.RecentFragmentListAdapter
+import com.p.fiveminutefriend.ChatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.p.fiveminutefriend.Adapters.ContactsFragmentListAdapter
 import com.p.fiveminutefriend.Constants
 import com.p.fiveminutefriend.Model.Contact
+import com.p.fiveminutefriend.Model.Match
+import com.p.fiveminutefriend.Model.User
 import com.p.fiveminutefriend.R
+import kotlinx.android.synthetic.main.content_chat.*
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import kotlinx.android.synthetic.main.fragment_recent.*
+import java.util.*
 
 
 class ContactsFragment : Fragment() {
@@ -35,17 +47,68 @@ class ContactsFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val contacts = getContacts()
+        val contacts = ArrayList<User>()
 
         val manager = LinearLayoutManager(activity,
                 LinearLayoutManager.VERTICAL,
                 false)
 
         recyclerview_contacts.itemAnimator = DefaultItemAnimator()
-        val adapter = ContactsFragmentListAdapter(contacts, activity)
+        val adapter = ContactsFragmentListAdapter(contacts, object : ContactsFragmentListAdapter.OnItemClickListener {
+            override fun onItemClick(item: User) {
+                val contactUID = item.uid
+
+                val intent = Intent(activity, ChatActivity::class.java)
+                intent.putExtra("matchId", contactUID)
+                intent.putExtra("isFriend", true)
+                startActivity(intent)
+            }
+        })
         recyclerview_contacts.adapter = adapter
         recyclerview_contacts.layoutManager = manager
 
+        val user = FirebaseAuth.getInstance().currentUser
+        val uid = user!!.uid
+        val friendsRef = FirebaseDatabase.getInstance().reference.child("Users/$uid/friends").orderByValue()
+        friendsRef.addChildEventListener(object : ChildEventListener {
+            override fun onCancelled(p0: DatabaseError?) {
+            }
+
+            override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
+                if (p0 != null) {
+                    val key = p0.key
+                    val userRef = FirebaseDatabase.getInstance().reference.child("Users/$key")
+                    userRef.addListenerForSingleValueEvent( object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                val username = dataSnapshot.child("username").value
+                                val firstName = dataSnapshot.child("firstName").value
+                                val lastName = dataSnapshot.child("lastName").value
+                                val email = dataSnapshot.child("email").value
+                                val language = dataSnapshot.child("language").value
+                                val age = dataSnapshot.child("age").value
+                                val gender = dataSnapshot.child("language").value
+                                contacts.add(User(key, firstName as String?, lastName as String?, username as String?, email as String?, language as String?, 20, 0))
+                                recyclerview_contacts.adapter.notifyItemInserted(contacts.size - 1)
+                            }
+                        }
+
+                        override fun onCancelled(p0: DatabaseError?) {
+
+                        }
+                    })
+                }
+            }
+
+            override fun onChildChanged(p0: DataSnapshot?, p1: String?) {
+            }
+
+            override fun onChildMoved(p0: DataSnapshot?, p1: String?) {
+            }
+
+            override fun onChildRemoved(p0: DataSnapshot?) {
+            }
+        })
     }
 
     private fun getContacts() : List<Contact> {
