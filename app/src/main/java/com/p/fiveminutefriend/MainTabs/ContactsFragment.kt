@@ -1,42 +1,27 @@
 package com.p.fiveminutefriend.MainTabs
 
-
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.bassaer.chatmessageview.model.Message
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.iid.FirebaseInstanceId
 import com.p.fiveminutefriend.Adapters.ContactsFragmentListAdapter
-import com.p.fiveminutefriend.Adapters.RecentFragmentListAdapter
 import com.p.fiveminutefriend.ChatActivity
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.p.fiveminutefriend.Adapters.ContactsFragmentListAdapter
 import com.p.fiveminutefriend.Constants
 import com.p.fiveminutefriend.Model.Contact
-import com.p.fiveminutefriend.Model.Match
 import com.p.fiveminutefriend.Model.User
 import com.p.fiveminutefriend.R
-import kotlinx.android.synthetic.main.content_chat.*
 import kotlinx.android.synthetic.main.fragment_contacts.*
-import kotlinx.android.synthetic.main.fragment_recent.*
 import java.util.*
 
-
 class ContactsFragment : Fragment() {
-
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
