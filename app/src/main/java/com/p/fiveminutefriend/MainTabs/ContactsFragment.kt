@@ -20,9 +20,7 @@ import com.p.fiveminutefriend.R
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import java.util.*
 
-
 class ContactsFragment : Fragment() {
-
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

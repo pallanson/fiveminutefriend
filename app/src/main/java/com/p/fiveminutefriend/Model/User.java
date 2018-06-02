@@ -1,22 +1,37 @@
 package com.p.fiveminutefriend.Model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+@Entity
 public class User {
 
     public static final int GENDER_MALE = 0;
     public static final int GENDER_FEMALE = 1;
     public static final int GENDER_OTHER = 2;
 
+    @PrimaryKey
+    @NonNull
     private String uid;
+    @ColumnInfo(name = "first_name")
     private String firstName;
+    @ColumnInfo(name = "last_name")
     private String lastName;
+    @ColumnInfo(name = "username")
     private String username;
+    @ColumnInfo(name = "email")
     private String email;
+    @ColumnInfo(name = "language")
     private String language;
+    @ColumnInfo(name = "age")
     private int age;
+    @ColumnInfo(name = "gender")
     private int gender;
+    @ColumnInfo(name = "status")
     private String status;
+    @ColumnInfo(name = "fcm_token")
     private String FCMToken;
 
     public User(@NonNull String uid,
@@ -36,6 +51,10 @@ public class User {
         this.language = language;
         this.age = age;
         this.gender = gender;
+    }
+
+    public User() {
+
     }
 
     //Temporary Constructor for list
