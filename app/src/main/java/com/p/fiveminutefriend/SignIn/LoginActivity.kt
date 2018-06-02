@@ -13,6 +13,9 @@ import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.p.fiveminutefriend.Constants
+import com.p.fiveminutefriend.Database.AppDatabase
 import com.p.fiveminutefriend.LoginPreferences
 import com.p.fiveminutefriend.MainActivity
 import com.p.fiveminutefriend.R
@@ -108,6 +111,10 @@ class LoginActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, MainActivity::class.java)
                         intent.putExtra("uid", FirebaseAuth.getInstance().currentUser!!.uid)
+
+                        //Database Stuff
+                        AppDatabase.getAppDatabase(this).syncUser()
+
                         startActivity(intent)
                     }
                     else {
@@ -154,7 +161,5 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
-
-
 }
 

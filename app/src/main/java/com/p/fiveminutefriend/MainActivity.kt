@@ -7,9 +7,12 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.p.fiveminutefriend.Adapters.MainActivityPagerAdapter
+import com.p.fiveminutefriend.Database.AppDatabase
+import com.p.fiveminutefriend.Model.User
 import com.p.fiveminutefriend.SignIn.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_match.*
@@ -23,6 +26,19 @@ class MainActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val thread = object : Thread() {
+            override fun run() {
+
+                val user = AppDatabase
+                       .getAppDatabase(this@MainActivity)
+                       .userDao()
+                       .findByUid(FirebaseAuth.getInstance().uid)
+                        .also {
+                    Log.e("Database Works", it.email)
+                }
+            }
+        }
+        thread.start()
 
         toolbar_main.inflateMenu(R.menu.menu_main)
 
