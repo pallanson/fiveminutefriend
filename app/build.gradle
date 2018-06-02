@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.p.fiveminutefriend"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -40,7 +40,7 @@ dependencies {
     implementation 'com.github.bassaer:chatmessageview:1.10.0'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
-
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
 }
 
 apply plugin: 'kotlin-android'
