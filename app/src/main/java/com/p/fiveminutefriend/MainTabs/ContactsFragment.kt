@@ -13,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.p.fiveminutefriend.Adapters.ContactsFragmentListAdapter
 import com.p.fiveminutefriend.ChatActivity
-import com.google.firebase.database.FirebaseDatabase
 import com.p.fiveminutefriend.Constants
 import com.p.fiveminutefriend.Model.Contact
 import com.p.fiveminutefriend.Model.User

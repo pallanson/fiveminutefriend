@@ -17,7 +17,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.p.fiveminutefriend.FiltersFragment
 import com.p.fiveminutefriend.Model.Match
-
 import com.p.fiveminutefriend.R
 import kotlinx.android.synthetic.main.fragment_match.*
 
@@ -54,8 +53,8 @@ class MatchFragment : Fragment(){
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
-        var editor: SharedPreferences.Editor = preferences.edit()
+        val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
+        val editor: SharedPreferences.Editor = preferences.edit()
         val user = FirebaseAuth.getInstance().currentUser
         val key = user!!.uid
 
@@ -92,6 +91,7 @@ class MatchFragment : Fragment(){
                                 preferences.getInt("myGender", 2),
                                 preferences.getString("myLanguage", "English"),
                                 FirebaseInstanceId.getInstance().token)
+                        editor.apply()
                         reference.setValue(match)
                     } else {
                         reference.removeValue()
