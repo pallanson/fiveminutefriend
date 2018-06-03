@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fafafa"
+    android:id="@+id/layout_match"
     tools:context="com.p.fiveminutefriend.MainTabs.MatchFragment">
 
     <!-- TODO: Update blank fragment layout -->
