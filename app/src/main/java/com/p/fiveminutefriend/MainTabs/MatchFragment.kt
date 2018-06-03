@@ -2,9 +2,9 @@ package com.p.fiveminutefriend.MainTabs
 
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.os.Build
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +15,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
-import android.widget.Toast
+import com.p.fiveminutefriend.FiltersFragment
 import com.p.fiveminutefriend.Model.Match
 
 import com.p.fiveminutefriend.R
@@ -24,7 +24,8 @@ import kotlinx.android.synthetic.main.fragment_match.*
 /**
  * A simple [Fragment] subclass.
  */
-class MatchFragment : Fragment() {
+
+class MatchFragment : Fragment(){
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -32,6 +33,7 @@ class MatchFragment : Fragment() {
         val user = FirebaseAuth.getInstance().currentUser
         val key = user!!.uid
         val reference = database.child(key)
+
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (button_match != null) {
@@ -52,24 +54,44 @@ class MatchFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        button_match.setOnClickListener({
-            /*
-            val intent = Intent(activity, ChatActivity::class.java)
-            val options = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation(activity,
-                            button_match as View,
-                            "timer")
+        var preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
+        var editor: SharedPreferences.Editor = preferences.edit()
+        val user = FirebaseAuth.getInstance().currentUser
+        val key = user!!.uid
 
-            startActivity(intent, options.toBundle())*/
+        val userRef = FirebaseDatabase.getInstance().reference.child("Users/$key")
+        userRef.addListenerForSingleValueEvent( object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot?) {
+                if (p0 != null) {
+                    editor.putInt("myAge", p0.child("age").value.toString().toInt())
+                    editor.putInt("myGender", p0.child("gender").value.toString().toInt())
+                    editor.putString("myLanguage", p0.child("language").value.toString().trim())
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError?) {
+
+            }
+        })
+
+        button_match.setOnClickListener({
             val database = FirebaseDatabase.getInstance().reference.child("Matches")
-            val user = FirebaseAuth.getInstance().currentUser
-            val key = user!!.uid
+
             val reference = database.child(key)
             reference.addListenerForSingleValueEvent(object : ValueEventListener {
                 @SuppressLint("SetTextI18n")
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val match = Match(0, 100, 7, arrayListOf("English", "Swedish", "Language"), 25, 0, "English", FirebaseInstanceId.getInstance().token)
                     if (!dataSnapshot.exists()) {
+                        val defaultLanguages = arrayListOf<String>("English", "Swedish", "Language")
+                        val match = Match(
+                                preferences.getInt("minAge", 0),
+                                preferences.getInt("maxAge", 100),
+                                preferences.getInt("matchGender", 7),
+                                defaultLanguages,
+                                preferences.getInt("myAge", 26),
+                                preferences.getInt("myGender", 2),
+                                preferences.getString("myLanguage", "English"),
+                                FirebaseInstanceId.getInstance().token)
                         reference.setValue(match)
                     } else {
                         reference.removeValue()
@@ -83,20 +105,15 @@ class MatchFragment : Fragment() {
         })
 
         fab_filter_match.setOnClickListener({
-            val matchSettingsDialog = AlertDialog.Builder(context)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                matchSettingsDialog.setView(R.layout.dialog_match_settings)
-            }
-            matchSettingsDialog.setTitle("Match Settings")
-                    .setPositiveButton("Ok") { _, _ ->
-                        Toast.makeText(context, "Settings Changed", Toast.LENGTH_SHORT).show()
-                    }
-                    .setNegativeButton("Cancel") {_, _ ->
-                        Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show()
-                    }
-                    .create()
-                    .show()
+            val filtersFragment = FiltersFragment()
+            val manager = fragmentManager
+
+            val transaction = manager.beginTransaction()
+            transaction
+                    .replace(R.id.layout_match,
+                            filtersFragment)
+                    .addToBackStack("Password Reset")
+                    .commit()
         })
     }
-
-}// Required empty public constructor
+}
