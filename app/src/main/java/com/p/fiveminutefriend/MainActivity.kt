@@ -27,19 +27,6 @@ class MainActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val thread = object : Thread() {
-            override fun run() {
-
-                val user = AppDatabase
-                       .getAppDatabase(this@MainActivity)
-                       .userDao()
-                       .findByUid(FirebaseAuth.getInstance().uid)
-                        .also {
-                    Log.e("Database Works", it.email)
-                }
-            }
-        }
-        thread.start()
 
         toolbar_main.inflateMenu(R.menu.menu_main)
 

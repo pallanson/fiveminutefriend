@@ -19,10 +19,13 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.dialog_match_settings.*
 
-
 class FiltersFragment : Fragment() {
+
+    private lateinit var locationCallback: LocationCallback
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -34,6 +37,9 @@ class FiltersFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //Location Scrape
+        getLocationUpdates()
 
         text_select_minAge_filter.setOnClickListener({
             createNumberPicker(0)
@@ -155,25 +161,25 @@ class FiltersFragment : Fragment() {
                     activity.checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
 
-                val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
+                val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
                 val locationRequest = LocationRequest.create()
                         .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                        .setExpirationDuration(500)
-                        .setNumUpdates(1)
+                        .setExpirationDuration(2000)
+                        .setNumUpdates(5)
                         .setInterval(0)
 
-                fusedLocationProviderClient.requestLocationUpdates(locationRequest,
-                        object: LocationCallback() {
-                            override fun onLocationResult(result: LocationResult?) {
-                                super.onLocationResult(result)
-                                Toast.makeText(activity,
-                                        "Latitude: " + result!!.lastLocation.latitude.toString() + " || Longitude: " + result.lastLocation.longitude.toString(),
-                                        Toast.LENGTH_LONG).show()
-                                locationToFirebase(result!!.lastLocation.latitude.toString(),
-                                        result.lastLocation.longitude.toString())
+                locationCallback = object : LocationCallback() {
+                    override fun onLocationResult(locationResult: LocationResult?) {
+                        locationResult ?: return
+                        for (location in locationResult.locations){
+                            locationToFirebase(
+                                    location.longitude.toString(),
+                                    location.latitude.toString())
+                        }
+                    }
+                }
+                fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
 
-                            }
-                        }, null)
             } else {
                 ActivityCompat.requestPermissions(activity,
                         arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
@@ -185,8 +191,18 @@ class FiltersFragment : Fragment() {
 
     private fun locationToFirebase(lat : String, long : String) {
 
-        //Todo: Uload latitude and longitude to firebase, please help me!!!!
-        //Cannot remember for the life of me how to do it
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+
+        FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_USERS)
+                .child(userId)
+                .child("latitude")
+                .push()
+                .setValue(lat)
+        FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_USERS)
+                .child(userId)
+                .child("longitude")
+                .push()
+                .setValue(long)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
