@@ -61,7 +61,12 @@ class ChatActivity : AppCompatActivity() {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
                         theirUser = ChatUser(1, dataSnapshot.child("username").value.toString(), userIcon)
-                        canChat = dataSnapshot.hasChild("matches/$uid") || dataSnapshot.hasChild("friends/$uid")
+                        canChat = dataSnapshot.hasChild("friends/$uid")
+                        canChat = canChat || (dataSnapshot.hasChild("matches/$uid") && (System.currentTimeMillis() - dataSnapshot.child("matches/$uid").value as Long) <= 300000)
+                        if (!canChat) {
+                            fab_refuse_chat.hide()
+                            fab_accept_chat.hide()
+                        }
                         chatView.setEnableSendButton(canChat)
                         if (dataSnapshot.hasChild("friends/$uid")){
                             text_username.text = theirUser.getName()
