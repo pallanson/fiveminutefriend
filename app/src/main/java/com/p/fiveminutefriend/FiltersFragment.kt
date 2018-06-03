@@ -5,11 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.app.AlertDialog
+import android.content.ContentValues
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import android.preference.PreferenceManager
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.widget.NumberPicker
 import android.widget.Toast
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.dialog_match_settings.*
 
 
@@ -20,6 +29,8 @@ class FiltersFragment : Fragment() {
 
         return inflater!!.inflate(R.layout.dialog_match_settings, container, false)
     }
+
+    private var LOCATION_REQUEST_CODE = 101
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,13 +44,13 @@ class FiltersFragment : Fragment() {
 
         button_save_filters.setOnClickListener({
 
-            var preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
-            var editor: SharedPreferences.Editor = preferences.edit()
+            val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
+            val editor: SharedPreferences.Editor = preferences.edit()
 
             var matchGender = 0
-            var minAge : Int?
-            var maxAge : Int?
-            var matchLanguage = arrayListOf<String>()
+            val minAge : Int?
+            val maxAge : Int?
+            val matchLanguage = arrayListOf<String>()
 
             // Get Gender Selection
             if (checkbox_male_match_settings.isChecked) {
@@ -135,5 +146,66 @@ class FiltersFragment : Fragment() {
             }
             else -> return
         }
+    }
+
+    private fun getLocationUpdates() {
+        if(Build.VERSION.SDK_INT >= 23) {
+            if (activity.checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED &&
+                    activity.checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+
+                val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
+                val locationRequest = LocationRequest.create()
+                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                        .setExpirationDuration(500)
+                        .setNumUpdates(1)
+                        .setInterval(0)
+
+                fusedLocationProviderClient.requestLocationUpdates(locationRequest,
+                        object: LocationCallback() {
+                            override fun onLocationResult(result: LocationResult?) {
+                                super.onLocationResult(result)
+                                Toast.makeText(activity,
+                                        "Latitude: " + result!!.lastLocation.latitude.toString() + " || Longitude: " + result.lastLocation.longitude.toString(),
+                                        Toast.LENGTH_LONG).show()
+                                locationToFirebase(result!!.lastLocation.latitude.toString(),
+                                        result.lastLocation.longitude.toString())
+
+                            }
+                        }, null)
+            } else {
+                ActivityCompat.requestPermissions(activity,
+                        arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
+                                android.Manifest.permission.ACCESS_COARSE_LOCATION),
+                        LOCATION_REQUEST_CODE)
+            }
+        }
+    }
+
+    private fun locationToFirebase(lat : String, long : String) {
+
+        //Todo: Uload latitude and longitude to firebase, please help me!!!!
+        //Cannot remember for the life of me how to do it
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<out String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when(requestCode) {
+            LOCATION_REQUEST_CODE -> {
+                if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(activity,
+                            "To get better matches, please accept location permissions",
+                            Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    Log.v(ContentValues.TAG, "Permission Granted by User")
+                }
+            }
+        }
+
     }
 }
