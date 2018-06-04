@@ -52,7 +52,7 @@ class RecentFragment : Fragment() {
 
     private fun addUser(list : ArrayList<User> , user : User){
         list.add(user)
-        recyclerview_recent.adapter.notifyItemInserted(list.size - 1)
+        recyclerview_recent!!.adapter.notifyItemInserted(list.size - 1)
     }
 
     private fun createTempList(): List<User> {
