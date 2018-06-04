@@ -50,17 +50,38 @@ class RecentFragment : Fragment() {
         })
     }
 
-    private fun addUser(list : ArrayList<User> , user : User){
-        list.add(user)
-        recyclerview_recent.adapter.notifyItemInserted(list.size - 1)
+    private fun addUser(list : ArrayList<User>, set : HashSet<String>, user : User){
+        if (!set.contains(user.uid)) {
+            list.add(user)
+            set.add(user.uid)
+            recyclerview_recent.adapter?.notifyItemInserted(list.size - 1)
+        }
+    }
+
+    private fun addToList(list : ArrayList<User>, set : HashSet<String>, uid : String){
+        val matchRef = FirebaseDatabase.getInstance().reference.child("Users/$uid")
+        matchRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val matchUID = dataSnapshot.child("uid").value.toString()
+                val username = dataSnapshot.child("username").value.toString()
+                val firstName = dataSnapshot.child("firstName").value.toString()
+                val lastName = dataSnapshot.child("lastName").value.toString()
+
+                addUser(list, set, User(matchUID, username, firstName, lastName))
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+            }
+        })
     }
 
     private fun createTempList(): List<User> {
 
         val user = FirebaseAuth.getInstance().currentUser
-        val uid = user!!.uid
+        val uid = user?.uid
         val chatRef = FirebaseDatabase.getInstance().reference.child("Messages")
-        var recentMatches = ArrayList<User>()
+        var matchesList = ArrayList<User>()
+        var recentMatches = HashSet<String>()
 
         chatRef.addChildEventListener(object : ChildEventListener {
             override fun onCancelled(p0: DatabaseError?) {
@@ -69,19 +90,12 @@ class RecentFragment : Fragment() {
             override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
                 if (p0 != null) {
                     if (p0.key != uid && p0.hasChild(uid)){
-                        val matchRef = FirebaseDatabase.getInstance().reference.child("Users/${p0.key}")
-                        matchRef.addValueEventListener(object : ValueEventListener {
-                            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                val matchUID = dataSnapshot.child("uid").value.toString()
-                                val firstName = dataSnapshot.child("firstName").value.toString()
-                                val lastName = dataSnapshot.child("lastName").value.toString()
-
-                                addUser(recentMatches, User(matchUID, firstName, lastName))
-                            }
-
-                            override fun onCancelled(databaseError: DatabaseError) {
-                            }
-                        })
+                        addToList(matchesList, recentMatches, p0.key)
+                    }
+                    else if (p0.key == uid){
+                        for (child in p0.children) {
+                            addToList(matchesList, recentMatches, child.key)
+                        }
                     }
                 }
             }
@@ -96,6 +110,6 @@ class RecentFragment : Fragment() {
             }
         })
 
-        return recentMatches
+        return matchesList
     }
 }

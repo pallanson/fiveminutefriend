@@ -102,6 +102,7 @@ class LoginActivity : AppCompatActivity() {
                 return
             }
 
+            button_sign_in_login.isEnabled = false
             FirebaseAuth.getInstance()
                 .signInWithEmailAndPassword(emailOrUsername, password)
                 .addOnCompleteListener({
@@ -121,6 +122,7 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this, "Incorrect Username or Password",
                                 Toast.LENGTH_SHORT).show()
                     }
+                    button_sign_in_login.isEnabled = true
                 })
         }
 
