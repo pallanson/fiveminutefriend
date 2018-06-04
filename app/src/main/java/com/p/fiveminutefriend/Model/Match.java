@@ -10,9 +10,9 @@ public class Match {
     public int gender = 7;
     public List<String> languages;
     public int myAge;
+    public long canMatch = 0;
     public int myGender;
     public String myLanguage;
-
     public String myToken;
 
     public Match(){
@@ -28,6 +28,18 @@ public class Match {
         this.myGender = myGender;
         this.myLanguage = myLanguage;
         this.myToken = myToken;
+    }
+
+    public Match(int ageMin, int ageMax, int gender, List<String> languages, int myAge, int myGender, String myLanguage, String myToken, long canMatch) {
+        this.ageMin = ageMin;
+        this.ageMax = ageMax;
+        this.gender = gender;
+        this.languages = languages;
+        this.myAge = myAge;
+        this.myGender = myGender;
+        this.myLanguage = myLanguage;
+        this.myToken = myToken;
+        this.canMatch = canMatch;
     }
 
     public int getAgeMin() {
@@ -70,7 +82,6 @@ public class Match {
         this.myAge = myAge;
     }
 
-
     public int getMyGender() {
         return myGender;
     }
@@ -94,4 +105,8 @@ public class Match {
     public void setMyToken(String myToken) {
         this.myToken = myToken;
     }
+
+    public long getCanMatch() { return canMatch; }
+
+    public void setCanMatch(long canMatch) { this.canMatch = canMatch; }
 }

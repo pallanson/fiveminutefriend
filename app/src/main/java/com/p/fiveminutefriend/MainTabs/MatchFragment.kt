@@ -4,6 +4,7 @@ package com.p.fiveminutefriend.MainTabs
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -18,7 +19,9 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.p.fiveminutefriend.FiltersFragment
 import com.p.fiveminutefriend.Model.Match
 import com.p.fiveminutefriend.R
+import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.fragment_match.*
+import java.util.concurrent.TimeUnit
 
 /**
  * A simple [Fragment] subclass.
@@ -26,11 +29,17 @@ import kotlinx.android.synthetic.main.fragment_match.*
 
 class MatchFragment : Fragment(){
 
+    var canMatch = true
+    var nextMatchTime : Long = 0
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val database = FirebaseDatabase.getInstance().reference.child("Matches")
+        val handler = Handler()
         val user = FirebaseAuth.getInstance().currentUser
         val key = user!!.uid
+        val delay : Long = 500
+        val canMatchReference = FirebaseDatabase.getInstance().reference.child("Users").child(key).child("canMatch")
         val reference = database.child(key)
 
         reference.addValueEventListener(object : ValueEventListener {
@@ -41,6 +50,36 @@ class MatchFragment : Fragment(){
                     } else {
                         button_match.text = "MATCH"
                     }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+
+            }
+        })
+
+        canMatchReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot?) {
+                if (p0!!.exists()) {
+                    nextMatchTime = p0.value as Long
+                    canMatch =  nextMatchTime < System.currentTimeMillis()
+                    handler.postDelayed(object : Runnable {
+                        override fun run() {
+                            button_match.isEnabled = canMatch
+                            if (!canMatch) {
+                                val timer = nextMatchTime - System.currentTimeMillis()
+                                if (timer > 0) {
+                                    button_match.isEnabled = canMatch
+                                    button_match.text = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(timer) % TimeUnit.HOURS.toMinutes(1),
+                                            TimeUnit.MILLISECONDS.toSeconds(timer) % TimeUnit.MINUTES.toSeconds(1))
+                                    handler.postDelayed(this, delay)
+                                }
+                            }
+                            else {
+                                button_match.text = "MATCH"
+                            }
+                        }
+                    }, delay)
                 }
             }
 
@@ -90,7 +129,8 @@ class MatchFragment : Fragment(){
                                 preferences.getInt("myAge", 26),
                                 preferences.getInt("myGender", 2),
                                 preferences.getString("myLanguage", "English"),
-                                FirebaseInstanceId.getInstance().token)
+                                FirebaseInstanceId.getInstance().token,
+                                nextMatchTime)
                         editor.apply()
                         reference.setValue(match)
                     } else {
