@@ -50,9 +50,11 @@ class RecentFragment : Fragment() {
         })
     }
 
-    private fun addUser(list : ArrayList<User> , user : User){
-        list.add(user)
-        recyclerview_recent!!.adapter.notifyItemInserted(list.size - 1)
+    private fun addUser(list : ArrayList<User>, set : HashSet<User>, user : User){
+        if (!set.contains(user)) {
+            list.add(user)
+            recyclerview_recent!!.adapter.notifyItemInserted(list.size - 1)
+        }
     }
 
     private fun createTempList(): List<User> {
@@ -60,7 +62,8 @@ class RecentFragment : Fragment() {
         val user = FirebaseAuth.getInstance().currentUser
         val uid = user!!.uid
         val chatRef = FirebaseDatabase.getInstance().reference.child("Messages")
-        var recentMatches = ArrayList<User>()
+        var matchesList = ArrayList<User>()
+        var recentMatches = HashSet<User>()
 
         chatRef.addChildEventListener(object : ChildEventListener {
             override fun onCancelled(p0: DatabaseError?) {
@@ -76,7 +79,7 @@ class RecentFragment : Fragment() {
                                 val firstName = dataSnapshot.child("firstName").value.toString()
                                 val lastName = dataSnapshot.child("lastName").value.toString()
 
-                                addUser(recentMatches, User(matchUID, firstName, lastName))
+                                addUser(matchesList, recentMatches, User(matchUID, firstName, lastName))
                             }
 
                             override fun onCancelled(databaseError: DatabaseError) {
@@ -96,6 +99,6 @@ class RecentFragment : Fragment() {
             }
         })
 
-        return recentMatches
+        return matchesList
     }
 }
