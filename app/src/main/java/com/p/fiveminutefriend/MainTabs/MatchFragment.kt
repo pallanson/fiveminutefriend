@@ -74,6 +74,9 @@ class MatchFragment : Fragment(){
                                             TimeUnit.MILLISECONDS.toSeconds(timer) % TimeUnit.MINUTES.toSeconds(1))
                                     handler.postDelayed(this, delay)
                                 }
+                                else {
+                                    button_match?.text = "MATCH"
+                                }
                             }
                             else {
                                 button_match?.text = "MATCH"
