@@ -54,25 +54,29 @@ class RecentFragment : Fragment() {
         if (!set.contains(user.uid)) {
             list.add(user)
             set.add(user.uid)
-            recyclerview_recent.adapter?.notifyItemInserted(list.size - 1)
+            if (recyclerview_recent != null) {
+                recyclerview_recent.adapter?.notifyItemInserted(list.size - 1)
+            }
         }
     }
 
     private fun addToList(list : ArrayList<User>, set : HashSet<String>, uid : String){
-        val matchRef = FirebaseDatabase.getInstance().reference.child("Users/$uid")
-        matchRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val matchUID = dataSnapshot.child("uid").value.toString()
-                val username = dataSnapshot.child("username").value.toString()
-                val firstName = dataSnapshot.child("firstName").value.toString()
-                val lastName = dataSnapshot.child("lastName").value.toString()
+        if (!set.contains(uid)) {
+            val matchRef = FirebaseDatabase.getInstance().reference.child("Users/$uid")
+            matchRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val matchUID = dataSnapshot.child("uid").value.toString()
+                    val username = dataSnapshot.child("username").value.toString()
+                    val firstName = dataSnapshot.child("firstName").value.toString()
+                    val lastName = dataSnapshot.child("lastName").value.toString()
 
-                addUser(list, set, User(matchUID, username, firstName, lastName))
-            }
+                    addUser(list, set, User(matchUID, username, firstName, lastName))
+                }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                }
+            })
+        }
     }
 
     private fun createTempList(): List<User> {

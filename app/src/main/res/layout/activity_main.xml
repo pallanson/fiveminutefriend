@@ -11,9 +11,9 @@
         android:id="@+id/toolbar_main"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
+        android:background="?android:attr/colorPrimary"
+        android:minHeight="?android:attr/actionBarSize"
+        android:theme="?android:attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="62dp"
         android:background="@color/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
+        android:minHeight="?android:attr/actionBarSize"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_main"
         app:tabIndicatorColor="@android:color/background_light"
         app:tabSelectedTextColor="@android:color/background_light"
@@ -38,7 +38,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tab_layout_main_activity">
-    </android.support.v4.view.ViewPager>
+        app:layout_constraintTop_toBottomOf="@+id/tab_layout_main_activity"></android.support.v4.view.ViewPager>
 
 </android.support.constraint.ConstraintLayout>

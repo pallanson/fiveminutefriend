@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="?android:attr/actionBarSize"
     android:id="@+id/layout_recent"
     tools:context="com.p.fiveminutefriend.MainTabs.RecentFragment">
 
@@ -10,8 +11,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_recent"
-        android:layout_width="395dp"
-        android:layout_height="643dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
