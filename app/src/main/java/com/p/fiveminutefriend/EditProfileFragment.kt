@@ -3,6 +3,7 @@ package com.p.fiveminutefriend
 import android.app.AlertDialog
 import android.support.v4.app.Fragment
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.p.fiveminutefriend.Database.AppDatabase
 import com.p.fiveminutefriend.Model.User
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 
@@ -24,6 +26,20 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //Database stuff
+        val thread = object : Thread() {
+            override fun run() {
+                AppDatabase
+                        .getAppDatabase(activity)
+                        .userDao()
+                        .findByUid(FirebaseAuth.getInstance().uid)
+                        .also {
+                            Log.e("Database Works", it.email)
+                        }
+            }
+        }
+        thread.start()
 
         val dbReference = FirebaseDatabase.getInstance()
                 .getReferenceFromUrl(Constants.FIREBASE_USERS)
