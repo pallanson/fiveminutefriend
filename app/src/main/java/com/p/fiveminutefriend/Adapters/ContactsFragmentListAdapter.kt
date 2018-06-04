@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.storage.FirebaseStorage
+import com.p.fiveminutefriend.Constants
 import com.p.fiveminutefriend.Model.Contact
 import com.p.fiveminutefriend.Model.User
 import com.p.fiveminutefriend.R
@@ -33,6 +35,20 @@ class ContactsFragmentListAdapter (private val contacts : List<User>, private va
                 .resize(90, 90)
                 .centerCrop()
                 .into(holder.image)
+        val storageReference = FirebaseStorage
+                .getInstance()
+                .getReferenceFromUrl(Constants.FIREBASE_STORAGE_REFERENCE +
+                        contacts[position]?.uid)
+
+        storageReference.child("profilePic")
+                .downloadUrl
+                .addOnSuccessListener {
+                    Picasso.get()
+                            .load(it.toString())
+                            .resize(90, 90)
+                            .centerCrop()
+                            .into(holder.image)
+                }
     }
 
     override fun getItemCount(): Int {
