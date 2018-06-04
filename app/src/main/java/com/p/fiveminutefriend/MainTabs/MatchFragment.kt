@@ -62,9 +62,9 @@ class MatchFragment : Fragment(){
             override fun onDataChange(p0: DataSnapshot?) {
                 if (p0!!.exists()) {
                     nextMatchTime = p0.value as Long
-                    canMatch =  nextMatchTime < System.currentTimeMillis()
                     handler.postDelayed(object : Runnable {
                         override fun run() {
+                            canMatch =  nextMatchTime < System.currentTimeMillis()
                             button_match.isEnabled = canMatch
                             if (!canMatch) {
                                 val timer = nextMatchTime - System.currentTimeMillis()
