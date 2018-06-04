@@ -5,6 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.util.Objects;
+
 @Entity
 public class User {
 
@@ -63,6 +65,14 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
 
+    }
+
+    public User(String uid, String username, String firstName, String lastName)
+    {
+        this.uid = uid;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
     }
 
     public String getStatus() {
@@ -143,6 +153,10 @@ public class User {
 
     public void setFCMToken(String FCMToken) {
         this.FCMToken = FCMToken;
+    }
+
+    public int hashCode() {
+        return Objects.hash(this.uid, this.username, this.firstName, this.lastName);
     }
 
     @Override
