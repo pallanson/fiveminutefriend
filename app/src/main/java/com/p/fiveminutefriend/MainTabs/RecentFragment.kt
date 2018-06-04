@@ -54,7 +54,7 @@ class RecentFragment : Fragment() {
         if (!set.contains(user.uid)) {
             list.add(user)
             set.add(user.uid)
-            recyclerview_recent!!.adapter.notifyItemInserted(list.size - 1)
+            recyclerview_recent.adapter?.notifyItemInserted(list.size - 1)
         }
     }
 
@@ -78,7 +78,7 @@ class RecentFragment : Fragment() {
     private fun createTempList(): List<User> {
 
         val user = FirebaseAuth.getInstance().currentUser
-        val uid = user!!.uid
+        val uid = user?.uid
         val chatRef = FirebaseDatabase.getInstance().reference.child("Messages")
         var matchesList = ArrayList<User>()
         var recentMatches = HashSet<String>()

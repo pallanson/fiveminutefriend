@@ -37,7 +37,7 @@ class MatchFragment : Fragment(){
         val database = FirebaseDatabase.getInstance().reference.child("Matches")
         val handler = Handler()
         val user = FirebaseAuth.getInstance().currentUser
-        val key = user!!.uid
+        val key = user?.uid
         val delay : Long = 500
         val canMatchReference = FirebaseDatabase.getInstance().reference.child("Users").child(key).child("canMatch")
         val reference = database.child(key)
@@ -61,22 +61,22 @@ class MatchFragment : Fragment(){
         canMatchReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot?) {
                 if (p0!!.exists()) {
-                    nextMatchTime = p0.value as Long
+                    nextMatchTime = p0?.value as Long
                     handler.postDelayed(object : Runnable {
                         override fun run() {
                             canMatch =  nextMatchTime < System.currentTimeMillis()
-                            button_match!!.isEnabled = canMatch
+                            button_match?.isEnabled = canMatch
                             if (!canMatch) {
                                 val timer = nextMatchTime - System.currentTimeMillis()
                                 if (timer > 0) {
-                                    button_match!!.isEnabled = canMatch
-                                    button_match!!.text = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(timer) % TimeUnit.HOURS.toMinutes(1),
+                                    button_match?.isEnabled = canMatch
+                                    button_match?.text = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(timer) % TimeUnit.HOURS.toMinutes(1),
                                             TimeUnit.MILLISECONDS.toSeconds(timer) % TimeUnit.MINUTES.toSeconds(1))
                                     handler.postDelayed(this, delay)
                                 }
                             }
                             else {
-                                button_match!!.text = "MATCH"
+                                button_match?.text = "MATCH"
                             }
                         }
                     }, delay)
@@ -87,7 +87,7 @@ class MatchFragment : Fragment(){
 
             }
         })
-        return inflater!!.inflate(R.layout.fragment_match, container, false)
+        return inflater?.inflate(R.layout.fragment_match, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -95,7 +95,7 @@ class MatchFragment : Fragment(){
         val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
         val editor: SharedPreferences.Editor = preferences.edit()
         val user = FirebaseAuth.getInstance().currentUser
-        val key = user!!.uid
+        val key = user?.uid
 
         val userRef = FirebaseDatabase.getInstance().reference.child("Users/$key")
         userRef.addListenerForSingleValueEvent( object : ValueEventListener {

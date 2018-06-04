@@ -42,7 +42,7 @@ class ChatActivity : AppCompatActivity() {
         isFriend = intent.getBooleanExtra("isFriend", false)
         val userIcon = BitmapFactory.decodeResource(this.resources, R.drawable.ic_action_add)
         val user = FirebaseAuth.getInstance().currentUser
-        val uid = user!!.uid
+        val uid = user?.uid
         val myUser = ChatUser(0, "Me", userIcon)
         val handler = Handler()
         val delay : Long = 500
