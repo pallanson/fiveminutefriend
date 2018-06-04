@@ -144,4 +144,13 @@ public class User {
     public void setFCMToken(String FCMToken) {
         this.FCMToken = FCMToken;
     }
+
+    @Override
+    public boolean equals(Object obj){
+        if (obj != null && User.class.isAssignableFrom(obj.getClass())) {
+            final User other = (User) obj;
+            return other.uid.equals(this.uid);
+        }
+        return false;
+    }
 }
