@@ -64,7 +64,7 @@ class ContactsFragment : Fragment() {
                     val userRef = FirebaseDatabase.getInstance().reference.child("Users/$key")
                     userRef.addListenerForSingleValueEvent( object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            if (dataSnapshot.exists()) {
+                            if (dataSnapshot.exists() && recyclerview_contacts != null) {
                                 val username = dataSnapshot.child("username").value
                                 val firstName = dataSnapshot.child("firstName").value
                                 val lastName = dataSnapshot.child("lastName").value
@@ -73,7 +73,7 @@ class ContactsFragment : Fragment() {
                                 val age = dataSnapshot.child("age").value
                                 val gender = dataSnapshot.child("language").value
                                 contacts.add(User(key, firstName as String?, lastName as String?, username as String?, email as String?, language as String?, 20, 0))
-                                recyclerview_contacts.adapter.notifyItemInserted(contacts.size - 1)
+                                recyclerview_contacts.adapter.notifyDataSetChanged()
                             }
                         }
 

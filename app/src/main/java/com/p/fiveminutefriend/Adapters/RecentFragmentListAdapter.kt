@@ -41,7 +41,7 @@ class RecentFragmentListAdapter(private val items: List<User>,
         val friendCheck = recentRow.imageView_friend_check_recent_row
 
         fun bind(item: User, listener: OnItemClickListener) {
-            name.setText(item.firstName)
+            name.text = item.firstName
             itemView.setOnClickListener { listener.onItemClick(item) }
         }
     }
