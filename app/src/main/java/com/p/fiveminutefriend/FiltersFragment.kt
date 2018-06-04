@@ -10,8 +10,10 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.preference.PreferenceManager
+import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
+import android.util.ArraySet
 import android.util.Log
 import android.widget.NumberPicker
 import android.widget.Toast
@@ -35,8 +37,11 @@ class FiltersFragment : Fragment() {
 
     private var LOCATION_REQUEST_CODE = 101
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
+        val editor: SharedPreferences.Editor = preferences.edit()
 
         //Location Scrape
         getLocationUpdates()
@@ -48,15 +53,32 @@ class FiltersFragment : Fragment() {
             createNumberPicker(1)
         })
 
+        val gender = preferences.getInt("matchGender", 7)
+        val minAge = preferences.getInt("minAge", 0)
+        val maxAge = preferences.getInt("maxAge", 100)
+        when (gender) {
+            1 -> checkbox_male_match_settings.isChecked = true
+            2 -> checkbox_female_match_settings.isChecked = true
+            3 -> setMaleFemale()
+            4 -> checkbox_other_match_settings.isChecked = true
+            5 -> setMaleOther()
+            6 -> setFemaleOther()
+            7 -> setAll()
+        }
+
+        text_select_minAge_filter.setText(minAge.toString())
+        text_select_maxAge_filter.setText(maxAge.toString())
+
+        checkbox_english_match_settings.isChecked = preferences.getBoolean("english", false)
+        checkbox_swedish_match_settings.isChecked = preferences.getBoolean("swedish", false)
+
         button_save_filters.setOnClickListener({
 
-            val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
-            val editor: SharedPreferences.Editor = preferences.edit()
-
             var matchGender = 0
-            val minAge : Int?
-            val maxAge : Int?
-            val matchLanguage = arrayListOf<String>()
+            val minAge: Int?
+            val maxAge: Int?
+            val english: Boolean = checkbox_english_match_settings.isChecked
+            val swedish: Boolean = checkbox_swedish_match_settings.isChecked
 
             // Get Gender Selection
             if (checkbox_male_match_settings.isChecked) {
@@ -77,7 +99,6 @@ class FiltersFragment : Fragment() {
             // Get Age Selection
 
 
-
             if (text_select_minAge_filter.text.toString().equals("Select")) {
                 minAge = 0
             } else
@@ -89,12 +110,9 @@ class FiltersFragment : Fragment() {
 
             // Get Language Selection
 
-            if (checkbox_english_match_settings.isChecked)
-                matchLanguage.add("English")
-            if (checkbox_swedish_match_settings.isChecked)
-                matchLanguage.add("Swedish")
-
             editor.putInt("matchGender", matchGender)
+            editor.putBoolean("english", english)
+            editor.putBoolean("swedish", swedish)
             editor.putInt("minAge", minAge)
             editor.putInt("maxAge", maxAge)
             editor.apply()
@@ -155,7 +173,7 @@ class FiltersFragment : Fragment() {
     }
 
     private fun getLocationUpdates() {
-        if(Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= 23) {
             if (activity.checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED &&
                     activity.checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -179,7 +197,6 @@ class FiltersFragment : Fragment() {
                     }
                 }
                 fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
-
             } else {
                 ActivityCompat.requestPermissions(activity,
                         arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
@@ -189,7 +206,7 @@ class FiltersFragment : Fragment() {
         }
     }
 
-    private fun locationToFirebase(lat : String, long : String) {
+    private fun locationToFirebase(lat: String, long: String) {
 
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -210,18 +227,34 @@ class FiltersFragment : Fragment() {
                                             grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        when(requestCode) {
+        when (requestCode) {
             LOCATION_REQUEST_CODE -> {
-                if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(activity,
                             "To get better matches, please accept location permissions",
                             Toast.LENGTH_SHORT).show()
-                }
-                else {
+                } else {
                     Log.v(ContentValues.TAG, "Permission Granted by User")
                 }
             }
         }
 
+    }
+    fun setMaleFemale() {
+        checkbox_male_match_settings.isChecked = true
+        checkbox_female_match_settings.isChecked = true
+    }
+    fun setMaleOther() {
+        checkbox_male_match_settings.isChecked = true
+        checkbox_other_match_settings.isChecked = true
+    }
+    fun setFemaleOther() {
+        checkbox_female_match_settings.isChecked = true
+        checkbox_other_match_settings.isChecked = true
+    }
+    fun setAll() {
+        checkbox_female_match_settings.isChecked = true
+        checkbox_male_match_settings.isChecked = true
+        checkbox_other_match_settings.isChecked = true
     }
 }
