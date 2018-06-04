@@ -65,18 +65,18 @@ class MatchFragment : Fragment(){
                     handler.postDelayed(object : Runnable {
                         override fun run() {
                             canMatch =  nextMatchTime < System.currentTimeMillis()
-                            button_match.isEnabled = canMatch
+                            button_match!!.isEnabled = canMatch
                             if (!canMatch) {
                                 val timer = nextMatchTime - System.currentTimeMillis()
                                 if (timer > 0) {
-                                    button_match.isEnabled = canMatch
-                                    button_match.text = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(timer) % TimeUnit.HOURS.toMinutes(1),
+                                    button_match!!.isEnabled = canMatch
+                                    button_match!!.text = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(timer) % TimeUnit.HOURS.toMinutes(1),
                                             TimeUnit.MILLISECONDS.toSeconds(timer) % TimeUnit.MINUTES.toSeconds(1))
                                     handler.postDelayed(this, delay)
                                 }
                             }
                             else {
-                                button_match.text = "MATCH"
+                                button_match!!.text = "MATCH"
                             }
                         }
                     }, delay)

@@ -1,10 +1,12 @@
 package com.p.fiveminutefriend
 
+import android.content.DialogInterface
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
@@ -53,7 +55,6 @@ class ChatActivity : AppCompatActivity() {
             val sentRef = FirebaseDatabase.getInstance().reference.child("Messages/$uid/$matchId").orderByChild("timeSent")
             val receiveRef = FirebaseDatabase.getInstance().reference.child("Messages/$matchId/$uid").orderByChild("timeSent")
             if (isFriend){
-                fab_refuse_chat.hide();
                 fab_accept_chat.hide();
                 text_timer_chat.text = ""
             }
@@ -64,7 +65,6 @@ class ChatActivity : AppCompatActivity() {
                         canChat = dataSnapshot.hasChild("friends/$uid")
                         canChat = canChat || (dataSnapshot.hasChild("matches/$uid") && (System.currentTimeMillis() - dataSnapshot.child("matches/$uid").value as Long) <= 300000)
                         if (!canChat) {
-                            fab_refuse_chat.hide()
                             fab_accept_chat.hide()
                         }
                         chatView.setEnableSendButton(canChat)
@@ -82,7 +82,6 @@ class ChatActivity : AppCompatActivity() {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
                         if (dataSnapshot.hasChild("friends/$matchId")) {
-                            fab_refuse_chat.hide()
                             fab_accept_chat.hide()
                             text_timer_chat.text = ""
                             isFriend = true
@@ -107,7 +106,6 @@ class ChatActivity : AppCompatActivity() {
                             }, delay)
                         }
                         else {
-                            fab_refuse_chat.hide()
                             fab_accept_chat.hide()
                             canChat = false
                             chatView.send(Message.Builder()
@@ -221,18 +219,41 @@ class ChatActivity : AppCompatActivity() {
         }
 
         fab_refuse_chat.setOnClickListener({
-            val data = HashMap<String, Any>()
-            data["matchId"] = matchId
-            data["matchTime"] = matchTime
-            this.onBackPressed()
-            FirebaseFunctions.getInstance()
-                    .getHttpsCallable("skipMatch")
-                    .call(data)
-                    .addOnCompleteListener({
-                        if (!it.isSuccessful) {
-                            val ffe: FirebaseFunctionsException = it.exception as FirebaseFunctionsException
-                        }
-                    })
+            if (!isFriend) {
+                val data = HashMap<String, Any>()
+                data["matchId"] = matchId
+                data["matchTime"] = matchTime
+                this.onBackPressed()
+                FirebaseFunctions.getInstance()
+                        .getHttpsCallable("skipMatch")
+                        .call(data)
+                        .addOnCompleteListener({
+                            if (!it.isSuccessful) {
+                                val ffe: FirebaseFunctionsException = it.exception as FirebaseFunctionsException
+                            }
+                        })
+            }
+            else {
+                AlertDialog.Builder(this)
+                        .setTitle("Remove friend")
+                        .setMessage("Are you sure you would like to remove ${theirUser.getName()} from your friends list?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, { _: DialogInterface, _: Int ->
+                            val data = HashMap<String, Any>()
+                            data["friendId"] = matchId
+                            this.onBackPressed()
+                            FirebaseFunctions.getInstance()
+                                    .getHttpsCallable("removeFriend")
+                                    .call(data)
+                                    .addOnCompleteListener({
+                                        if (!it.isSuccessful) {
+                                            val ffe: FirebaseFunctionsException = it.exception as FirebaseFunctionsException
+                                        }
+                                    })
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .show()
+            }
         })
     }
 }
