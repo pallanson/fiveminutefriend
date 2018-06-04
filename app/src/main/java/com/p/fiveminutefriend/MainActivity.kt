@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.p.fiveminutefriend.Adapters.MainActivityPagerAdapter
 import com.p.fiveminutefriend.Database.AppDatabase
 import com.p.fiveminutefriend.Model.User
@@ -84,6 +85,14 @@ class MainActivity: AppCompatActivity() {
             override fun onTabReselected(tab: TabLayout.Tab) {
             }
         })
+    }
+
+    override fun onDestroy() {
+        val user = FirebaseAuth.getInstance().currentUser
+        val key = user?.uid
+        FirebaseDatabase.getInstance().reference.child("Matches/$key").removeValue()
+
+        super.onDestroy()
     }
 
     private fun performSignOut() {

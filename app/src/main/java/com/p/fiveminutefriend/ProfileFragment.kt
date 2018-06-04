@@ -235,7 +235,8 @@ class ProfileFragment : Fragment() {
     private fun getImageFromFirebase() {
         val storageReference = FirebaseStorage
                 .getInstance()
-                .getReferenceFromUrl(Constants.FIREBASE_STORAGE_REFERENCE)
+                .getReferenceFromUrl(Constants.FIREBASE_STORAGE_REFERENCE +
+                        FirebaseAuth.getInstance().currentUser!!.uid)
 
         storageReference.child("profilePic")
                 .downloadUrl
@@ -252,7 +253,8 @@ class ProfileFragment : Fragment() {
 
     private fun uploadImageToFirebase(bitmap: Bitmap) {
         val storageReference = FirebaseStorage.getInstance()
-                .getReferenceFromUrl(Constants.FIREBASE_STORAGE_REFERENCE)
+                .getReferenceFromUrl(Constants.FIREBASE_STORAGE_REFERENCE +
+                        FirebaseAuth.getInstance().currentUser!!.uid)
         val fileReference = storageReference.child("profilePic")
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)

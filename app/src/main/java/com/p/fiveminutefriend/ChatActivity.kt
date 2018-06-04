@@ -1,8 +1,10 @@
 package com.p.fiveminutefriend
 
 import android.content.DialogInterface
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.content.ContextCompat
@@ -21,10 +23,14 @@ import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.database.*
 import com.google.firebase.functions.FirebaseFunctionsException
 import com.google.firebase.functions.HttpsCallableResult
+import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.content_chat.*
 import kotlinx.android.synthetic.main.fragment_match.*
+import java.lang.Exception
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -40,13 +46,39 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val matchId = intent.getStringExtra("matchId")
         isFriend = intent.getBooleanExtra("isFriend", false)
-        val userIcon = BitmapFactory.decodeResource(this.resources, R.drawable.ic_action_add)
+        val userIcon = BitmapFactory.decodeResource(this.resources, R.drawable.mondom)
         val user = FirebaseAuth.getInstance().currentUser
         val uid = user?.uid
         val myUser = ChatUser(0, "Me", userIcon)
         val handler = Handler()
         val delay : Long = 500
         var theirUser = ChatUser(1, "Match", userIcon)
+        val storageReference = FirebaseStorage
+                .getInstance()
+                .getReferenceFromUrl(Constants.FIREBASE_STORAGE_REFERENCE +
+                        matchId)
+
+        storageReference.child("profilePic")
+                .downloadUrl
+                .addOnSuccessListener {
+                    Picasso.get()
+                            .load(it.toString())
+                            .resize(90, 90)
+                            .centerCrop()
+                            .into(object : Target{
+                                override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                                }
+
+                                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                                    if (bitmap != null) {
+                                        theirUser.setIcon(bitmap)
+                                    }
+                                }
+
+                                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                                }
+                            })
+                }
         setContentView(R.layout.activity_chat)
 
         if (matchId != "") {
@@ -55,7 +87,7 @@ class ChatActivity : AppCompatActivity() {
             val sentRef = FirebaseDatabase.getInstance().reference.child("Messages/$uid/$matchId").orderByChild("timeSent")
             val receiveRef = FirebaseDatabase.getInstance().reference.child("Messages/$matchId/$uid").orderByChild("timeSent")
             if (isFriend){
-                fab_accept_chat.hide();
+                fab_accept_chat.hide()
                 text_timer_chat.text = ""
             }
             matchRef.addValueEventListener(object : ValueEventListener {
@@ -66,6 +98,9 @@ class ChatActivity : AppCompatActivity() {
                         canChat = canChat || (dataSnapshot.hasChild("matches/$uid") && (System.currentTimeMillis() - dataSnapshot.child("matches/$uid").value as Long) <= 300000)
                         if (!canChat) {
                             fab_accept_chat.hide()
+                            if (!isFriend){
+                                fab_refuse_chat.hide()
+                            }
                         }
                         chatView.setEnableSendButton(canChat)
                         if (dataSnapshot.hasChild("friends/$uid")){
@@ -107,6 +142,9 @@ class ChatActivity : AppCompatActivity() {
                         }
                         else {
                             fab_accept_chat.hide()
+                            if (!isFriend){
+                                fab_refuse_chat.hide()
+                            }
                             canChat = false
                             chatView.send(Message.Builder()
                                     .setRight(false)
