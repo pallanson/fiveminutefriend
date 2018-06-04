@@ -223,7 +223,8 @@ class ChatActivity : AppCompatActivity() {
         fab_refuse_chat.setOnClickListener({
             val data = HashMap<String, Any>()
             data["matchId"] = matchId
-            this.onBackPressed();
+            data["matchTime"] = matchTime
+            this.onBackPressed()
             FirebaseFunctions.getInstance()
                     .getHttpsCallable("skipMatch")
                     .call(data)

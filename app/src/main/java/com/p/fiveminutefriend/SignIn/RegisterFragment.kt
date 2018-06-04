@@ -106,9 +106,9 @@ class RegisterFragment : Fragment() {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener({ task: Task<AuthResult> ->
                     if (task.isSuccessful) {
-                        dbReference
-                                .child(FirebaseAuth.getInstance().uid)
-                                .setValue(
+                                dbReference
+                                        .child(FirebaseAuth.getInstance().uid)
+                                        .setValue(
                                         User(
                                                 firebaseAuth.uid.toString(),
                                                 firstName,
