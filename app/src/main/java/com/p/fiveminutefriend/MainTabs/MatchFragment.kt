@@ -19,7 +19,6 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.p.fiveminutefriend.FiltersFragment
 import com.p.fiveminutefriend.Model.Match
 import com.p.fiveminutefriend.R
-import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.fragment_match.*
 import java.util.concurrent.TimeUnit
 

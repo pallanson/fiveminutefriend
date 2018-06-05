@@ -9,16 +9,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.p.fiveminutefriend.Adapters.RecentFragmentListAdapter
-import com.p.fiveminutefriend.R
-import com.p.fiveminutefriend.Model.User
-import kotlinx.android.synthetic.main.fragment_recent.*
-import com.google.firebase.database.DataSnapshot
 import com.p.fiveminutefriend.ChatActivity
-import com.p.fiveminutefriend.ContactProfileFragment
+import com.p.fiveminutefriend.Model.User
+import com.p.fiveminutefriend.R
+import kotlinx.android.synthetic.main.fragment_recent.*
 
 
 class RecentFragment : Fragment() {
