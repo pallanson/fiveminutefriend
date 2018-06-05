@@ -51,6 +51,11 @@ class RegisterFragment : Fragment() {
                         "Please select an age, gender and language.",
                         Toast.LENGTH_SHORT)
                         .show()
+            } else if (edit_password_register.text.length < 6){
+                Toast.makeText(activity,
+                        "Password cannot be shorter than six characters.",
+                        Toast.LENGTH_LONG)
+                        .show()
             } else {
                 val confirmationDialog = AlertDialog.Builder(activity)
                 confirmationDialog.setTitle("Register Account?")
@@ -118,14 +123,16 @@ class RegisterFragment : Fragment() {
                                                 language,
                                                 age,
                                                 genderInt))
+
+                        val intent = Intent(activity, MainActivity::class.java)
+                        startActivity(intent)
                     } else {
                         Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG)
                                 .show()
                     }
                 })
 
-        val intent = Intent(activity, MainActivity::class.java)
-        startActivity(intent)
+
     }
 
     private fun createNumberPicker(type: Int) {
