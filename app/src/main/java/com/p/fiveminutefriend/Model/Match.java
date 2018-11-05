@@ -1,7 +1,6 @@
 package com.p.fiveminutefriend.Model;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.List;
 
 public class Match {

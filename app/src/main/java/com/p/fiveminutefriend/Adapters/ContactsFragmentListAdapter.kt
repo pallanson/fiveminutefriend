@@ -1,14 +1,12 @@
 package com.p.fiveminutefriend.Adapters
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.storage.FirebaseStorage
 import com.p.fiveminutefriend.Constants
-import com.p.fiveminutefriend.Model.Contact
 import com.p.fiveminutefriend.Model.User
 import com.p.fiveminutefriend.R
 import com.squareup.picasso.Picasso

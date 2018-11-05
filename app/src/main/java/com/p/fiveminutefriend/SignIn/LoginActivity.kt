@@ -1,22 +1,18 @@
 package com.p.fiveminutefriend.SignIn
 
 import android.Manifest
-import android.os.Bundle
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import com.p.fiveminutefriend.Constants
 import com.p.fiveminutefriend.Database.AppDatabase
-import com.p.fiveminutefriend.LoginPreferences
 import com.p.fiveminutefriend.MainActivity
 import com.p.fiveminutefriend.R
 import kotlinx.android.synthetic.main.activity_login.*

@@ -10,26 +10,19 @@ import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Toast
-
-import com.github.bassaer.chatmessageview.model.Message
 import com.github.bassaer.chatmessageview.model.ChatUser
-import com.google.android.gms.tasks.Continuation
+import com.github.bassaer.chatmessageview.model.Message
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.database.*
+import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.FirebaseFunctionsException
-import com.google.firebase.functions.HttpsCallableResult
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
-
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.content_chat.*
-import kotlinx.android.synthetic.main.fragment_match.*
 import java.lang.Exception
 import java.util.*
 import java.util.concurrent.TimeUnit

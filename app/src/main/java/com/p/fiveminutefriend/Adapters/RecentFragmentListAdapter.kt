@@ -1,18 +1,15 @@
 package com.p.fiveminutefriend.Adapters
 
-import com.squareup.picasso.Picasso
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.p.fiveminutefriend.Constants
 import com.p.fiveminutefriend.Model.User
 import com.p.fiveminutefriend.R
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.custom_item_recents.view.*
-import kotlinx.android.synthetic.main.fragment_profile.*
 
 
 class RecentFragmentListAdapter(private val items: List<User>,
